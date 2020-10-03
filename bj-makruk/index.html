@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="th">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="keywords" content="Makruk, หมากรุก, หมากรุกไทย, โปรแกรมหมากรุก, Thai Chess, Chess, Chess Engine, Javascript, Play Chess, Chess Program, Javascript Chess">
+		<meta name="description" content="โปรแกรมหมากรุกไทย สำหรับเล่นหมากรุกออนไลน์ เขียนด้วยจาวาสคริปต์ ใช้ประโยชน์ในการฝึกเขียนโปรแกรม แก่นหลักเอามาจากโปรแกรมหมากรุกสากล JS Chess แล้วดัดแปลงเป็นหมากรุกไทย หากมีข้อแนะนำกรุณาติดต่อที่อยู่ข้างล่าง">
+		<meta name="author" content="บุญโฮม บำรุงภักดี (boonhome.b@gmail.com)">
+		<title>BJ Makruk หมากรุกไทยออนไลน์ on lovemakruk</title>
+		<link href="styles.css" rel="stylesheet" type="text/css">
+		<script type="text/javascript"> if (!window.console) console = {log: function() {}}; 
+		</script>
+	</head>
+	<body>
+		<header>
+			<h3>BJ Makruk 0.17 (บีเจ หมากรุกไทยออนไลน์  เวอร์ชั่น 0.17 ) </h3>
+		</header>
+		<div id="FenInDiv">
+			<input type="text" id="fenIn">		
+			<button type="button" id="SetFen">Play FEN</button>&nbsp;	
+			<button type="button" id="SetBoard">Set Board</button>&nbsp;	
+			<button type="button" id="lang" class="lang langEN">&nbsp;</button>	
+		</div>	
+		<div id="ThinkingImageDiv">	
+			
+		</div>
+		<div id="Board">
+		
+		</div>
+		<div id="CurrentFenDiv">
+			<span id="currentFenSpan"></span><br><br>
+			<button id='showHist'>Show history</button><span id="moveHistory"></span><br>
+			<button id='TCViewer'>TChess Viewer</button>&nbsp;
+			<button id='WBPGN'>Winboard PGN</button>
+		</div>	
+		<br>
+		<div id = "OppSelect">
+			Your Opponent:<br>
+			<input type="radio" name="opponent" value="comp" checked="yes">Computer<br>
+			<input type="radio" name="opponent" value="human">Human<br>
+		</div>
+		<div id="EngineOutput">
+			Thinking Time: <br>
+			<select id="ThinkTimeChoice">
+			  <option value="1">1 sec</option>
+			  <option value="2">2 sec</option>
+			  <option value="4">4 sec</option>
+			  <option value="6">6 sec</option>
+			  <option value="8">8 sec</option>
+			  <option value="10">10 sec</option>
+			</select><br><br>
+			<span id="BestOut">BestMove:</span><br>
+			<span id="DepthOut">Depth:</span><br>
+			<span id="ScoreOut">Score:</span><br>
+			<span id="NodesOut">Nodes:</span><br>
+			<span id="OrderingOut">Ordering:</span><br>
+			<span id="TimeOut">Time:</span><br><br>
+			<button type="button" id="SearchButton">Move Now</button><br>
+			<button type="button" id="NewGameButton">New Game</button><br>
+			<button type="button" id="FlipButton">Flip Board</button> <br>
+			<button type="button" id="AutoMove">Auto Move</button><br><br> 
+			<button type="button" id="TakeButton">Take Back</button><br><br>
+			<span id="GameStatus"></span><br><br>
+			<input type="checkbox" id="brdHC"><span id ="brdHCcheck">Request for Board Honour Counting<span><br>
+			<span id="BHVCountSpan"></span><br>
+			<span id="PHVCountSpan"></span><br>
+		</div>
+		<div id="SetPiece"></div>
+		<div class="footer">
+			[<a href="http://ancientchess.com/page/play-makruk.htm">How to play Makruk</a> | 
+			<a href="http://www.thaibg.com/template.php?CenterFile=thaichess_rule.html">กติกาหมากรุกไทย</a> ] 
+			<a href="https://www.facebook.com/BJ.Lovemakruk"><img alt="follow me on facebook" src="images/facebook_30x30.png" border=0></a>
+		</div>
+		<script src="js/jquery-1.10.1.min.js"></script>
+		<script src="js/defs.js"></script>
+		<script src="js/io.js"></script>
+		<script src="js/board.js"></script>
+		<script src="js/movegen.js"></script>
+		<script src="js/makemove.js"></script>
+		<script src="js/perft.js"></script>
+		<script src="js/evaluate.js"></script>
+		<script src="js/pvtable.js"></script>
+		<script src="js/search.js"></script>
+		<script src="js/protocol.js"></script>
+		<script src="js/gui.js"></script>
+		<script src="js/main.js"></script>
+	</body>
+</html>
