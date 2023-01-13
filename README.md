@@ -1,4 +1,4 @@
-# Homi.github.io
+# Bj-Makruk
 
 **โปรแกรม bj-makruk** สามารถเล่นออนไลน์ได้ตามลิงก์ : [https://Homi.github.io/](https://Homi.github.io/)
 
