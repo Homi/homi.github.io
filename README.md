@@ -1,6 +1,6 @@
 # Bj-Makruk
 
-**โปรแกรม bj-makruk** สามารถเล่นออนไลน์ได้ตามลิงก์ : [https://Homi.github.io/](https://Homi.github.io/)
+**โปรแกรม bj-makruk** สามารถเล่นออนไลน์ได้ตามลิงก์ : [https://homi.github.io/bj-makruk/index.html](https://Homi.github.io/)
 
 **โปรแกรม  bj-makruk**  สร้างตามคลิปสอนในยูทูปชื่อ [A tutorial series programming a chess engine in Javascript](https://youtu.be/2eA0bD3wV3Q) โดย **Bluefever Software**
 
