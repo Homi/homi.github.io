@@ -196,32 +196,32 @@ var ENDGAME_MAT = 1 * PieceVal[PIECES.wR] + 2 * PieceVal[PIECES.wN] + 2 * PieceV
 
 function MaterialDraw() {
 
-    if( 0 == brd_pceNum[PIECES.wR] && 0 == brd_pceNum[PIECES.bR] ){
-		if( 0 == brd_pceNum[PIECES.wC] && 0 == brd_pceNum[PIECES.bC] ){
-			if( 0 == brd_pceNum[PIECES.wM] && 0 == brd_pceNum[PIECES.bM] ){
-				if( 0 == brd_pceNum[PIECES.wP] && 0 == brd_pceNum[PIECES.bP] ){
+    if( 0 === brd_pceNum[PIECES.wR] && 0 === brd_pceNum[PIECES.bR] ){
+		if( 0 === brd_pceNum[PIECES.wC] && 0 === brd_pceNum[PIECES.bC] ){
+			if( 0 === brd_pceNum[PIECES.wM] && 0 === brd_pceNum[PIECES.bM] ){
+				if( 0 === brd_pceNum[PIECES.wP] && 0 === brd_pceNum[PIECES.bP] ){
 					return BOOL.TRUE;
 				}
-				else if( 0 == brd_pceNum[PIECES.wN] && 0 == brd_pceNum[PIECES.bN] ){
+				else if( 0 === brd_pceNum[PIECES.wN] && 0 === brd_pceNum[PIECES.bN] ){
 					if(Math.abs(brd_pceNum[PIECES.wP] - brd_pceNum[PIECES.bP]) < 2){
 						return BOOL.TRUE;
 					}
-					else if(pairOfPawn(PIECES.wP) == BOOL.FALSE && pairOfPawn(PIECES.bP)){
+					else if(pairOfPawn(PIECES.wP) === BOOL.FALSE && pairOfPawn(PIECES.bP)){
 						return BOOL.TRUE;
 					}
 				}
 			}
-			else if( 0 == brd_pceNum[PIECES.wP] && 0 == brd_pceNum[PIECES.bP] ){
-				if( 0 == brd_pceNum[PIECES.wN] && 0 == brd_pceNum[PIECES.bN] ){
+			else if( 0 === brd_pceNum[PIECES.wP] && 0 === brd_pceNum[PIECES.bP] ){
+				if( 0 === brd_pceNum[PIECES.wN] && 0 === brd_pceNum[PIECES.bN] ){
 					if(Math.abs(brd_pceNum[PIECES.wM] - brd_pceNum[PIECES.bM]) < 2){
 						return BOOL.TRUE;
 					}
 				}
 			}
 		}
-		else if( 0 == brd_pceNum[PIECES.wM] && 0 == brd_pceNum[PIECES.bM] ){
-			if( 0 == brd_pceNum[PIECES.wP] && 0 == brd_pceNum[PIECES.bP] ){
-				if( brd_pceNum[PIECES.wC] == brd_pceNum[PIECES.bC] ){
+		else if( 0 === brd_pceNum[PIECES.wM] && 0 === brd_pceNum[PIECES.bM] ){
+			if( 0 === brd_pceNum[PIECES.wP] && 0 === brd_pceNum[PIECES.bP] ){
+				if( brd_pceNum[PIECES.wC] === brd_pceNum[PIECES.bC] ){
 					return BOOL.TRUE;
 				}
 			}
@@ -266,7 +266,7 @@ function MedCol(pceMed){
 	var pceNum, sq, q0 = 0, q1 = 0;
 	for(pceNum = 0; pceNum < brd_pceNum[pceMed]; ++pceNum) {
 		sq = brd_pList[PCEINDEX(pceMed,pceNum)];
-		if( SqCol64[SQ64(sq)] == 1) ++q1;
+		if( SqCol64[SQ64(sq)] === 1) ++q1;
 		else ++q0;
 	}
 	if(q1 > q0) return 1;
@@ -280,7 +280,7 @@ function pairOfMed(pceMed){
 	var pceNum, sq, q0 = 0, q1 = 0;
 	for(pceNum = 0; pceNum < brd_pceNum[pceMed]; ++pceNum) {
 		sq = brd_pList[PCEINDEX(pceMed,pceNum)];
-		if( SqCol64[SQ64(sq)] == 1) ++q1;
+		if( SqCol64[SQ64(sq)] === 1) ++q1;
 		else ++q0;
 	}
 	
@@ -296,7 +296,7 @@ function pairOfPawn(pcePawn){
 	var pawnFiles = [0, 0, 0, 0, 0, 0, 0, 0];
 	for(pceNum = 0; pceNum < brd_pceNum[pcePawn]; ++pceNum){
 		sq = brd_pList[PCEINDEX(pcePawn,pceNum)];
-		if( FilesBrd[sq] != SQUARES.OFFBOARD ) pawnFiles[FilesBrd[sq]]++;
+		if( FilesBrd[sq] !== SQUARES.OFFBOARD ) pawnFiles[FilesBrd[sq]]++;
 	} 
 	for(file = FILES.FILE_A; file < FILES.FILE_H; ++file) {
 		if( pawnFiles[file] > 0 && pawnFiles[file+1] > 0 ) return BOOL.TRUE;
@@ -308,7 +308,7 @@ function EvalEndgame(bscore, wkSq, bkSq){
 	var score = bscore;
 	
 	// some known end-game
-	if(BlackMat == 0){
+	if(BlackMat === 0){
 		switch(WhiteMat){
 			case 0x0C: //KMMMK
 				pce = PIECES.wM;
@@ -316,7 +316,7 @@ function EvalEndgame(bscore, wkSq, bkSq){
 				for(pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
 					sq = brd_pList[PCEINDEX(pce,pceNum)];
 					if(pceDistance(sq, bkSq) > 4) score -= 15;
-					if(mc == KCorner[SQ64(bkSq)]) {
+					if(mc === KCorner[SQ64(bkSq)]) {
 						score += MedLight[SQ64(sq)];
 						score += KingE2[SQ64(wkSq)];
 					}
@@ -332,9 +332,9 @@ function EvalEndgame(bscore, wkSq, bkSq){
 				for(pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
 					sq = brd_pList[PCEINDEX(pce,pceNum)];
 					score += MedE[MIRROR64(SQ64(sq))];
-					if(MedCol(pce) != SQCOL.LIGHT) 
+					if(MedCol(pce) !== SQCOL.LIGHT) 
 						score -= LoneKingLight[SQ64(bkSq)];
-					else if(MedCol(pce) != SQCOL.DARK)
+					else if(MedCol(pce) !== SQCOL.DARK)
 						score -= LoneKingDark[SQ64(bkSq)];
 				}
 			break;
@@ -355,7 +355,7 @@ function EvalEndgame(bscore, wkSq, bkSq){
 		}
 	}
 	
-	if(WhiteMat == 0){
+	if(WhiteMat === 0){
 		switch(BlackMat){
 			case 0x0C: //KMMMK
 				pce = PIECES.bM;
@@ -363,7 +363,7 @@ function EvalEndgame(bscore, wkSq, bkSq){
 				for(pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
 					sq = brd_pList[PCEINDEX(pce,pceNum)];
 					if(pceDistance(sq, wkSq) > 4) score += 15;
-					if(mc == KCorner[SQ64(wkSq)]) {
+					if(mc === KCorner[SQ64(wkSq)]) {
 						score -= MedLight[SQ64(sq)];
 						score -= KingE2[MIRROR64(SQ64(bkSq))];
 					}
@@ -379,9 +379,9 @@ function EvalEndgame(bscore, wkSq, bkSq){
 				for(pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
 					sq = brd_pList[PCEINDEX(pce,pceNum)];
 					score -= MedE[SQ64(sq)];
-					if(MedCol(pce) != SQCOL.LIGHT) 
+					if(MedCol(pce) !== SQCOL.LIGHT) 
 						score += LoneKingLight[SQ64(wkSq)];
-					else if(MedCol(pce) != SQCOL.DARK)
+					else if(MedCol(pce) !== SQCOL.DARK)
 						score += LoneKingDark[SQ64(wkSq)];
 				}
 			break;
@@ -417,9 +417,9 @@ function SliderMobility(sq,	dir) {
 	var t_sq = sq + dir;
     var result = 0;
  
-    while ( SQOFFBOARD(t_sq) == BOOL.FALSE ) {
-		if ( brd_pieces[t_sq] != PIECES.EMPTY ) {
-			if ( PieceCol[brd_pieces[t_sq]] == (side ^ 1) )
+    while ( SQOFFBOARD(t_sq) === BOOL.FALSE ) {
+		if ( brd_pieces[t_sq] !== PIECES.EMPTY ) {
+			if ( PieceCol[brd_pieces[t_sq]] === (side ^ 1) )
 				return result + 1;
 			return result;
 		}
@@ -434,9 +434,9 @@ function LeaperMobility(sq,	dir) {
 	var t_sq = sq + dir;
     var result = 0;
 	
-	if( SQOFFBOARD(t_sq) == BOOL.FALSE ){
-		if ( brd_pieces[t_sq] != PIECES.EMPTY ) {
-			if ( PieceCol[brd_pieces[t_sq]] == (side ^ 1) )
+	if( SQOFFBOARD(t_sq) === BOOL.FALSE ){
+		if ( brd_pieces[t_sq] !== PIECES.EMPTY ) {
+			if ( PieceCol[brd_pieces[t_sq]] === (side ^ 1) )
 				return result + 1;
 			return result;
 		}
@@ -556,11 +556,11 @@ function EvalMobility(){
 function EvalAdvance(){
 	var score = 0;
 	
-	if(brd_pceNum[PIECES.wR] == 0 && brd_pceNum[PIECES.wC] > 0) score += 50;
-	if(brd_pceNum[PIECES.wR] == 0 && brd_pceNum[PIECES.wC] == 0 && brd_pceNum[PIECES.wM] > 1) score += 50;
+	if(brd_pceNum[PIECES.wR] === 0 && brd_pceNum[PIECES.wC] > 0) score += 50;
+	if(brd_pceNum[PIECES.wR] === 0 && brd_pceNum[PIECES.wC] === 0 && brd_pceNum[PIECES.wM] > 1) score += 50;
 	
-	if(brd_pceNum[PIECES.bR] == 0 && brd_pceNum[PIECES.bC] > 0) score -= 50;
-	if(brd_pceNum[PIECES.bR] == 0 && brd_pceNum[PIECES.bC] == 0 && brd_pceNum[PIECES.bM] > 1) score -= 50;
+	if(brd_pceNum[PIECES.bR] === 0 && brd_pceNum[PIECES.bC] > 0) score -= 50;
+	if(brd_pceNum[PIECES.bR] === 0 && brd_pceNum[PIECES.bC] === 0 && brd_pceNum[PIECES.bM] > 1) score -= 50;
 		
 	return score;
 }
@@ -577,11 +577,11 @@ function EvalPosition() {
 	wkSq = brd_pList[PCEINDEX(PIECES.wK,0)];
 	bkSq = brd_pList[PCEINDEX(PIECES.bK,0)];
 	
-	if(MaterialDraw() == BOOL.TRUE) {
+	if(MaterialDraw() === BOOL.TRUE) {
 		return 0;
 	}
 	
-	if(BlackMat == 0 || WhiteMat == 0 ){
+	if(BlackMat === 0 || WhiteMat === 0 ){
 		return EvalEndgame(score, wkSq, bkSq);
 	}
 	
@@ -593,7 +593,7 @@ function EvalPosition() {
 		score += PawnTable[SQ64(sq)];	
 		file = FilesBrd[sq]+1;
 		rank = RanksBrd[sq];
-		if(PawnRanksWhite[file-1]==RANKS.RANK_8 && PawnRanksWhite[file+1]==RANKS.RANK_8) { //no neighbour
+		if(PawnRanksWhite[file-1]===RANKS.RANK_8 && PawnRanksWhite[file+1]===RANKS.RANK_8) { //no neighbour
 			score += PawnIsolated;
 		}
 		if(PawnRanksBlack[file-1]<=rank && PawnRanksBlack[file]<=rank && PawnRanksBlack[file+1]<=rank) { //no enemy
@@ -607,7 +607,7 @@ function EvalPosition() {
 		score -= PawnTable[MIRROR64(SQ64(sq))];	
 		file = FilesBrd[sq]+1;
 		rank = RanksBrd[sq];
-		if(PawnRanksBlack[file-1]==RANKS.RANK_1 && PawnRanksBlack[file+1]==RANKS.RANK_1) { //no neighbour
+		if(PawnRanksBlack[file-1]===RANKS.RANK_1 && PawnRanksBlack[file+1]===RANKS.RANK_1) { //no neighbour
 			score -= PawnIsolated;
 		}	
 		if(PawnRanksWhite[file-1]>=rank && PawnRanksWhite[file]>=rank && PawnRanksWhite[file+1]>=rank) { //no enemy
@@ -620,10 +620,10 @@ function EvalPosition() {
 		sq = brd_pList[PCEINDEX(pce,pceNum)];
 		score += KnightTable[SQ64(sq)];
 		
-		if( (brd_pieces[sq+ 9] == PIECES.EMPTY && brd_pieces[sq+19] == PIECES.bP)||
-			(brd_pieces[sq+11] == PIECES.EMPTY && brd_pieces[sq+21] == PIECES.bP) )
+		if( (brd_pieces[sq+ 9] === PIECES.EMPTY && brd_pieces[sq+19] === PIECES.bP)||
+			(brd_pieces[sq+11] === PIECES.EMPTY && brd_pieces[sq+21] === PIECES.bP) )
 			score -= 10;
-		if(brd_pieces[sq- 9] == PIECES.wP || brd_pieces[sq-11] == PIECES.wP)
+		if(brd_pieces[sq- 9] === PIECES.wP || brd_pieces[sq-11] === PIECES.wP)
 			score += 10;
 	}	
 	
@@ -632,10 +632,10 @@ function EvalPosition() {
 		sq = brd_pList[PCEINDEX(pce,pceNum)];
 		score -= KnightTable[MIRROR64(SQ64(sq))];
 		
-		if( (brd_pieces[sq- 9] == PIECES.EMPTY && brd_pieces[sq-19] == PIECES.wP)||
-			(brd_pieces[sq-11] == PIECES.EMPTY && brd_pieces[sq-21] == PIECES.wP) )
+		if( (brd_pieces[sq- 9] === PIECES.EMPTY && brd_pieces[sq-19] === PIECES.wP)||
+			(brd_pieces[sq-11] === PIECES.EMPTY && brd_pieces[sq-21] === PIECES.wP) )
 			score += 10;
-		if(brd_pieces[sq+ 9] == PIECES.bP || brd_pieces[sq+11] == PIECES.bP)
+		if(brd_pieces[sq+ 9] === PIECES.bP || brd_pieces[sq+11] === PIECES.bP)
 			score -= 10;
 	}			
 	
@@ -643,25 +643,25 @@ function EvalPosition() {
 	for(pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
 		sq = brd_pList[PCEINDEX(pce,pceNum)];
 		score += ConTable[SQ64(sq)];
-		if( (brd_pieces[sq+ 9] == PIECES.EMPTY && brd_pieces[sq+19] == PIECES.bP)||
-			(brd_pieces[sq+11] == PIECES.EMPTY && brd_pieces[sq+21] == PIECES.bP) )
+		if( (brd_pieces[sq+ 9] === PIECES.EMPTY && brd_pieces[sq+19] === PIECES.bP)||
+			(brd_pieces[sq+11] === PIECES.EMPTY && brd_pieces[sq+21] === PIECES.bP) )
 			score -= 10;
 		if(RanksBrd[bkSq] - RanksBrd[sq] < 0) score += (RanksBrd[bkSq] - RanksBrd[sq]) * 4;
 		if(brd_material[COLOURS.WHITE] <= ENDGAME_MAT) score -= pceDistance(sq, wkSq) * 4;
 	}	
-	if(brd_pceNum[pce] == 2) score += 15;
+	if(brd_pceNum[pce] === 2) score += 15;
 	
 	pce = PIECES.bC;	
 	for(pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
 		sq = brd_pList[PCEINDEX(pce,pceNum)];
 		score -= ConTable[MIRROR64(SQ64(sq))];
-		if( (brd_pieces[sq- 9] == PIECES.EMPTY && brd_pieces[sq-19] == PIECES.wP)||
-			(brd_pieces[sq-11] == PIECES.EMPTY && brd_pieces[sq-21] == PIECES.wP) )
+		if( (brd_pieces[sq- 9] === PIECES.EMPTY && brd_pieces[sq-19] === PIECES.wP)||
+			(brd_pieces[sq-11] === PIECES.EMPTY && brd_pieces[sq-21] === PIECES.wP) )
 			score += 10;
 		if(RanksBrd[wkSq] - RanksBrd[sq] >= 0) score += (RanksBrd[wkSq] - RanksBrd[sq]) * 4;
 		if(brd_material[COLOURS.BLACK] <= ENDGAME_MAT) score += pceDistance(sq, bkSq) * 4;
 	}
-	if(brd_pceNum[pce] == 2) score -= 15;
+	if(brd_pceNum[pce] === 2) score -= 15;
 	
 	pce = PIECES.wM;	
 	for(pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
@@ -693,11 +693,11 @@ function EvalPosition() {
 		score += RookTable[SQ64(sq)];	
 		file = FilesBrd[sq];
 
-		if( file == FilesBrd[bkSq] ) score += RookSightKing;
+		if( file === FilesBrd[bkSq] ) score += RookSightKing;
 
 		file++;
-		if(PawnRanksWhite[file]==RANKS.RANK_8) {
-			if(PawnRanksBlack[file]==RANKS.RANK_1) {
+		if(PawnRanksWhite[file]===RANKS.RANK_8) {
+			if(PawnRanksBlack[file]===RANKS.RANK_1) {
 				score += RookOpenFile;
 			} else  {
 				score += RookSemiOpenFile;
@@ -711,11 +711,11 @@ function EvalPosition() {
 		score -= RookTable[MIRROR64(SQ64(sq))];	
 		file = FilesBrd[sq];
 
-		if( file == FilesBrd[wkSq] ) score -= RookSightKing;
+		if( file === FilesBrd[wkSq] ) score -= RookSightKing;
 			
 		file++;
-		if(PawnRanksBlack[file]==RANKS.RANK_1) {
-			if(PawnRanksWhite[file]==RANKS.RANK_8) {
+		if(PawnRanksBlack[file]===RANKS.RANK_1) {
+			if(PawnRanksWhite[file]===RANKS.RANK_8) {
 				score -= RookOpenFile;
 			} else  {
 				score -= RookSemiOpenFile;
@@ -739,7 +739,7 @@ function EvalPosition() {
 	
 	score += EvalAdvance();
 	
-	if(brd_side == COLOURS.WHITE) {
+	if(brd_side === COLOURS.WHITE) {
 		return score;
 	} else {
 		return -score;

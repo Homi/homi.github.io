@@ -25,7 +25,7 @@ $("#SetFen").click(function () {
 
 	var fenStr = $("#fenIn").val();	
 	ParseFen(fenStr);
-	if(brd_pceNum[PIECES.wK]==0 || brd_pceNum[PIECES.bK]==0){
+	if(brd_pceNum[PIECES.wK]===0 || brd_pceNum[PIECES.bK]===0){
 		$('#fenIn').val(START_FEN);
 		ParseFen(START_FEN);
 	}
@@ -57,28 +57,28 @@ var BOARDS_HONOUR = 64;
 
 function check_honour_ruls(){
 	var CurrVal;
-	if(brd_pceNum[PIECES.wP] == 0 && brd_pceNum[PIECES.bP] == 0){ // No pawn ==> check honour rule
+	if(brd_pceNum[PIECES.wP] === 0 && brd_pceNum[PIECES.bP] === 0){ // No pawn ===> check honour rule
 	
 		CurrVal = (domUpdate_score)?domUpdate_score:EvalPosition();
 		
-		if(PHV_flag == BOOL.FALSE && $("#brdHC").is(":checked") == false){
-			if((CurrVal < 0 && GameController.EngineSide == COLOURS.BLACK) || (CurrVal > 0 && GameController.EngineSide == COLOURS.WHITE))
+		if(PHV_flag === BOOL.FALSE && $("#brdHC").is(":checked") === false){
+			if((CurrVal < 0 && GameController.EngineSide === COLOURS.BLACK) || (CurrVal > 0 && GameController.EngineSide === COLOURS.WHITE))
 				$("#brdHC").prop("checked",true); // Engine requests for board's honour rule.
 		}
 		
-		if(brd_colPceNum[COLOURS.WHITE] == 1 || brd_colPceNum[COLOURS.BLACK] == 1){ // Bare king ==> Piece's Honour Rule
-			if(PHV_flag == BOOL.FALSE){ // First time check
+		if(brd_colPceNum[COLOURS.WHITE] === 1 || brd_colPceNum[COLOURS.BLACK] === 1){ // Bare king ===> Piece's Honour Rule
+			if(PHV_flag === BOOL.FALSE){ // First time check
 			
 				if(brd_colPceNum[COLOURS.WHITE] > 1){ //White is superior.
 					brd_HR_weak = COLOURS.BLACK;
 					
-					if (brd_pceNum[PIECES.wR] != 0){ 
+					if (brd_pceNum[PIECES.wR] !== 0){ 
 						brd_PHV_value = ROOKS_HONOUR/brd_pceNum[PIECES.wR]; brd_HR_piece = 'R';
 					}
-					else if (brd_pceNum[PIECES.wC] != 0){ 
+					else if (brd_pceNum[PIECES.wC] !== 0){ 
 						brd_PHV_value = CONS_HONOUR/brd_pceNum[PIECES.wC]; brd_HR_piece = 'C';
 					}
-					else if (brd_pceNum[PIECES.wN] != 0){ 
+					else if (brd_pceNum[PIECES.wN] !== 0){ 
 						brd_PHV_value = KNIGHT_HONOUR/brd_pceNum[PIECES.wN]; brd_HR_piece = 'N';
 					}
 					else {
@@ -89,13 +89,13 @@ function check_honour_ruls(){
 				if(brd_colPceNum[COLOURS.BLACK] > 1){ //Black is superior.
 					brd_HR_weak = COLOURS.WHITE;
 					
-					if (brd_pceNum[PIECES.bR] != 0){ 
+					if (brd_pceNum[PIECES.bR] !== 0){ 
 						brd_PHV_value = ROOKS_HONOUR/brd_pceNum[PIECES.bR]; brd_HR_piece = 'r';
 					}
-					else if (brd_pceNum[PIECES.bC] != 0){ 
+					else if (brd_pceNum[PIECES.bC] !== 0){ 
 						brd_PHV_value = CONS_HONOUR/brd_pceNum[PIECES.bC]; brd_HR_piece = 'c';
 					}
-					else if (brd_pceNum[PIECES.bN] != 0){ 
+					else if (brd_pceNum[PIECES.bN] !== 0){ 
 						brd_PHV_value = KNIGHT_HONOUR/brd_pceNum[PIECES.bN]; brd_HR_piece = 'n';
 					}
 					else {
@@ -103,20 +103,20 @@ function check_honour_ruls(){
 					}
 				}
 				
-				if(BHV_flag == BOOL.TRUE) BHV_flag == BOOL.FALSE;
-				if($("#brdHC").is(":checked") == true) $("#brdHC").prop("checked",false);
+				if(BHV_flag === BOOL.TRUE) BHV_flag = BOOL.FALSE;
+				if($("#brdHC").is(":checked") === true) $("#brdHC").prop("checked",false);
 				brd_BHV_count = 0;
 				
 				PHV_flag = BOOL.TRUE;	// Set flag
 				brd_PHV_count = brd_colPceNum[COLOURS.WHITE] + brd_colPceNum[COLOURS.BLACK]; // Initial number
 			}
 			else { // Next time
-				if( brd_HR_weak ==  brd_side^1) brd_PHV_count++;
+				if( brd_HR_weak ===  brd_side^1) brd_PHV_count++;
 				brd_HR_count = brd_PHV_count;
 			}
 		}
-		else if($("#brdHC").is(":checked") == true && PHV_flag == BOOL.FALSE) { // Board's honour rule is requested.
-			if(BHV_flag == BOOL.FALSE){ // First time check
+		else if($("#brdHC").is(":checked") === true && PHV_flag === BOOL.FALSE) { // Board's honour rule is requested.
+			if(BHV_flag === BOOL.FALSE){ // First time check
 				BHV_flag = BOOL.TRUE; // Set flag
 				brd_BHV_count = 0;
 				if(CurrVal > 0) {
@@ -129,7 +129,7 @@ function check_honour_ruls(){
 				}
 			}
 			else { // Next time count
-				if( brd_HR_weak ==  brd_side^1 ) brd_BHV_count++;
+				if( brd_HR_weak ===  brd_side^1 ) brd_BHV_count++;
 				brd_HR_count = brd_BHV_count;
 			}
 		}
@@ -146,7 +146,7 @@ function CheckResult() {
      return BOOL.TRUE;
     }
 	
-	if (DrawMaterial() == BOOL.TRUE) {
+	if (DrawMaterial() === BOOL.TRUE) {
      $("#GameStatus").text("GAME DRAWN {insufficient material to mate}"); 
      return BOOL.TRUE;
     }
@@ -169,7 +169,7 @@ function CheckResult() {
 	var found = 0;
 	for(MoveNum = brd_moveListStart[brd_ply]; MoveNum < brd_moveListStart[brd_ply + 1]; ++MoveNum) {	
        
-        if ( MakeMove(brd_moveList[MoveNum]) == BOOL.FALSE)  {
+        if ( MakeMove(brd_moveList[MoveNum]) === BOOL.FALSE)  {
             continue;
         }
         found++;
@@ -181,17 +181,17 @@ function CheckResult() {
 	if($("#brdHC").is(":checked"))
 		$("#BHVCountSpan").text("BoardHonourCount: " + brd_BHV_count + "/64 "); 
 	else $("#BHVCountSpan").text(""); 
-	if(PHV_flag == BOOL.TRUE)
+	if(PHV_flag === BOOL.TRUE)
 		$("#PHVCountSpan").text("PieceHonourCount: " + brd_PHV_count + "/" + brd_PHV_value);
 	else $("#PHVCountSpan").text(""); 
 	
-	if(found != 0) return BOOL.FALSE;
+	if(found !== 0) return BOOL.FALSE;
 	
 	var InCheck = SqAttacked(brd_pList[PCEINDEX(Kings[brd_side],0)], brd_side^1);
 	console.log('No Move Found, incheck:' + InCheck);
 	
-	if(InCheck == BOOL.TRUE)	{
-	    if(brd_side == COLOURS.WHITE) {
+	if(InCheck === BOOL.TRUE)	{
+	    if(brd_side === COLOURS.WHITE) {
 	      $("#GameStatus").text("GAME OVER {black mates}");return BOOL.TRUE;
         } else {
 	      $("#GameStatus").text("GAME OVER {white mates}");return BOOL.TRUE;
@@ -218,7 +218,7 @@ function ClickedSquare(pageX, pageY) {
 	
 	var sq = FR2SQ(file,rank);
 	
-	if(GameController.BoardFlipped == BOOL.TRUE) {
+	if(GameController.BoardFlipped === BOOL.TRUE) {
 		sq = MIRROR120(sq);
 	}
 	
@@ -238,7 +238,7 @@ function updateMove(){
 	WhiteMat |= ((brd_pceNum[PIECES.wN]&3)<<4);
 	WhiteMat |= ((brd_pceNum[PIECES.wC]&1)<<6);
 	WhiteMat |= ((brd_pceNum[PIECES.wR]&1)<<7);
-	if( brd_pceNum[PIECES.wP] > 3 || brd_pceNum[PIECES.wM] > 3 || brd_pceNum[PIECES.wN] == 2 || brd_pceNum[PIECES.wC] == 2 || brd_pceNum[PIECES.wR] > 0 ){
+	if( brd_pceNum[PIECES.wP] > 3 || brd_pceNum[PIECES.wM] > 3 || brd_pceNum[PIECES.wN] === 2 || brd_pceNum[PIECES.wC] === 2 || brd_pceNum[PIECES.wR] > 0 ){
 		WhiteMat = 0xFF;
 	}
 	BlackMat = 0;
@@ -247,14 +247,14 @@ function updateMove(){
 	BlackMat |= ((brd_pceNum[PIECES.bN]&3)<<4);
 	BlackMat |= ((brd_pceNum[PIECES.bC]&1)<<6);
 	BlackMat |= ((brd_pceNum[PIECES.bR]&1)<<7);
-	if( brd_pceNum[PIECES.bP] > 3 || brd_pceNum[PIECES.bM] > 3 || brd_pceNum[PIECES.bN] == 2 || brd_pceNum[PIECES.bC] == 2 || brd_pceNum[PIECES.bR] > 0 ){
+	if( brd_pceNum[PIECES.bP] > 3 || brd_pceNum[PIECES.bM] > 3 || brd_pceNum[PIECES.bN] === 2 || brd_pceNum[PIECES.bC] === 2 || brd_pceNum[PIECES.bR] > 0 ){
 		BlackMat = 0xFF;
 	}
 }
 
 function CheckAndSet() {
 
-	if(CheckResult() != BOOL.TRUE) {
+	if(CheckResult() !== BOOL.TRUE) {
 		GameController.GameOver = BOOL.FALSE;
 		$("#GameStatus").text('');		
 	} else {
@@ -264,21 +264,21 @@ function CheckAndSet() {
 		// saveGame();
 		
 		computerPlay = BOOL.FALSE;
-		GameController.autoMove == BOOL.FALSE;
+		GameController.autoMove = BOOL.FALSE;
 		$("#AutoMove").text("Auto Move");
 		
 	}
 	updateMove();
 	$("#currentFenSpan").text(BoardToFen());
-	if(Show == BOOL.TRUE) $("#moveHistory").text(" " + printGameLine());
+	if(Show === BOOL.TRUE) $("#moveHistory").text(" " + printGameLine());
 	
-	if(GameController.autoMove == BOOL.TRUE) 
+	if(GameController.autoMove === BOOL.TRUE) 
 		PreSearch(); 
 }
 
 $("#showHist").click(function(e){
 
-	if(Show == BOOL.TRUE){
+	if(Show === BOOL.TRUE){
 		Show = BOOL.FALSE;
 		$("#showHist").text("Show history");
 		$("#moveHistory").text(" ");
@@ -369,7 +369,7 @@ $('#WBPGN').hide();
 
 function PreSearch() {
 
-	if(GameController.GameOver != BOOL.TRUE) {				
+	if(GameController.GameOver !== BOOL.TRUE) {				
 		srch_thinking = BOOL.TRUE;
 		$('#ThinkingImageDiv').append('<image src="images/think4.png" id="ThinkingPng"/>')
 		setTimeout( function() {StartSearch(); }, 200);
@@ -378,7 +378,7 @@ function PreSearch() {
 
 function MakeUserMove() {
 
-	if(UserMove.from != SQUARES.NO_SQ && UserMove.to != SQUARES.NO_SQ) {
+	if(UserMove.from !== SQUARES.NO_SQ && UserMove.to !== SQUARES.NO_SQ) {
 		console.log("User Move:" + PrSq(UserMove.from) + PrSq(UserMove.to));
 		
 		var parsed = ParseMove(UserMove.from,UserMove.to);
@@ -388,11 +388,11 @@ function MakeUserMove() {
 		
 		console.log("Parsed:" + parsed);
 		
-		if(parsed != NOMOVE) {
+		if(parsed !== NOMOVE) {
 			MakeMove(parsed);
 			MoveGUIPiece(parsed);
 			CheckAndSet();
-			if(computerPlay == BOOL.TRUE) {
+			if(computerPlay === BOOL.TRUE) {
 				PreSearch();
 			}
 			else { 
@@ -408,7 +408,7 @@ $(document).on('click','.Piece', function (e) {
 
 	console.log("Piece Click");
 	
-	if(setupBoard == BOOL.TRUE){
+	if(setupBoard === BOOL.TRUE){
 		var sq = ClickedSquare(e.pageX, e.pageY);
 		ClearPiece(sq);
 		$("#currentFenSpan").text(BoardToFen());
@@ -419,8 +419,8 @@ $(document).on('click','.Piece', function (e) {
 		return;
 	}
 	
-	if(srch_thinking == BOOL.FALSE && GameController.PlayerSide == brd_side) {
-		if(UserMove.from == SQUARES.NO_SQ) 
+	if(srch_thinking === BOOL.FALSE && GameController.PlayerSide === brd_side) {
+		if(UserMove.from === SQUARES.NO_SQ) 
 			UserMove.from = ClickedSquare(e.pageX, e.pageY);
 		else 
 			UserMove.to = ClickedSquare(e.pageX, e.pageY);	
@@ -432,10 +432,10 @@ $(document).on('click','.Square', function (e) {
 
 	console.log("Square Click");
 	
-	if(setupBoard == BOOL.TRUE){
-		if( selectedPiece == PIECES.EMPTY) return;
+	if(setupBoard === BOOL.TRUE){
+		if( selectedPiece === PIECES.EMPTY) return;
 		var sq = ClickedSquare(e.pageX, e.pageY);
-		if( AddPiece(sq, selectedPiece) == BOOL.TRUE){
+		if( AddPiece(sq, selectedPiece) === BOOL.TRUE){
 			AddGUIPiece(sq, selectedPiece);
 		}
 		DeselectSq(sq);
@@ -445,7 +445,7 @@ $(document).on('click','.Square', function (e) {
 		return;
 	}
 	
-	if(srch_thinking == BOOL.FALSE && GameController.PlayerSide == brd_side && UserMove.from != SQUARES.NO_SQ) {
+	if(srch_thinking === BOOL.FALSE && GameController.PlayerSide === brd_side && UserMove.from !== SQUARES.NO_SQ) {
 		UserMove.to = ClickedSquare(e.pageX, e.pageY);
 		MakeUserMove();
 	}
@@ -454,7 +454,7 @@ $(document).on('click','.Square', function (e) {
 function RemoveGUIPiece(sq) {
 
 	$( ".Piece" ).each(function( index ) {
-		 if( (RanksBrd[sq] == 7 - Math.round($(this).position().top/60)) && (FilesBrd[sq] == Math.round($(this).position().left/60)) ){		
+		 if( (RanksBrd[sq] === 7 - Math.round($(this).position().top/60)) && (FilesBrd[sq] === Math.round($(this).position().left/60)) ){		
 			$(this).remove();			
 		 }
 		});
@@ -479,7 +479,7 @@ function MoveGUIPiece(move) {
 	var flippedFrom = from;
 	var flippedTo = to;
 	
-	if(GameController.BoardFlipped == BOOL.TRUE) {
+	if(GameController.BoardFlipped === BOOL.TRUE) {
 		flippedFrom = MIRROR120(from);
 		flippedTo = MIRROR120(to);
 	}
@@ -497,7 +497,7 @@ function MoveGUIPiece(move) {
 	var fileName = "file" + (file + 1);
 	
 	$( ".Piece" ).each(function( index ) {
-	 if( (RanksBrd[flippedFrom] == 7 - Math.round($(this).position().top/60)) && (FilesBrd[flippedFrom] == Math.round($(this).position().left/60)) ){
+	 if( (RanksBrd[flippedFrom] === 7 - Math.round($(this).position().top/60)) && (FilesBrd[flippedFrom] === Math.round($(this).position().left/60)) ){
      	$(this).removeClass();
      	$(this).addClass("Piece clickElement " + rankName + " " + fileName);     
      }
@@ -505,7 +505,7 @@ function MoveGUIPiece(move) {
 
     var prom = PROMOTED(move);
     console.log("PromPce:" + prom);
-    if(prom != PIECES.EMPTY) {
+    if(prom !== PIECES.EMPTY) {
 		console.log("prom removing from " + PrSq(flippedTo));
     	RemoveGUIPiece(flippedTo);
     	AddGUIPiece(flippedTo,prom);
@@ -517,16 +517,16 @@ function MoveGUIPiece(move) {
 	SetSqSelected(LastMove.From );
 	SetSqSelected(LastMove.To);
 	
-	computerPlay = (Opponent == "comp")?BOOL.TRUE:BOOL.FALSE;
+	computerPlay = (Opponent === "comp")?BOOL.TRUE:BOOL.FALSE;
 }
 
 function DeselectSq(sq) {
 
-	if(GameController.BoardFlipped == BOOL.TRUE) {
+	if(GameController.BoardFlipped === BOOL.TRUE) {
 		sq = MIRROR120(sq);
 	}
 	$( ".Square" ).each(function( index ) {     
-	 if( (RanksBrd[sq] == 7 - Math.round($(this).position().top/60)) && (FilesBrd[sq] == Math.round($(this).position().left/60)) ){     	
+	 if( (RanksBrd[sq] === 7 - Math.round($(this).position().top/60)) && (FilesBrd[sq] === Math.round($(this).position().left/60)) ){     	
      	$(this).removeClass('SqSelected');    
      }
     });
@@ -534,18 +534,18 @@ function DeselectSq(sq) {
 
 function SetSqSelected(sq) {
 
-	if(GameController.BoardFlipped == BOOL.TRUE) {
+	if(GameController.BoardFlipped === BOOL.TRUE) {
 		sq = MIRROR120(sq);
 	}
 	$( ".Square" ).each(function( index ) {    
-	 if( (RanksBrd[sq] == 7 - Math.round($(this).position().top/60)) && (FilesBrd[sq] == Math.round($(this).position().left/60)) ){   
+	 if( (RanksBrd[sq] === 7 - Math.round($(this).position().top/60)) && (FilesBrd[sq] === Math.round($(this).position().left/60)) ){   
      	$(this).addClass('SqSelected');    
      }
     });
 }
 
 function StartSearch() {
-	if(setupBoard == BOOL.TRUE) return;
+	if(setupBoard === BOOL.TRUE) return;
 	srch_depth = MAXDEPTH;
 	var t = $.now();
 	var tt = $('#ThinkTimeChoice').val();
@@ -574,11 +574,11 @@ $("#TakeButton").click(function () {
 		clearThinking();
 		SetInitialBoardPieces();
 		$("#currentFenSpan").text(BoardToFen());
-		if(Show == BOOL.TRUE) $("#moveHistory").text(" " + printGameLine());
+		if(Show === BOOL.TRUE) $("#moveHistory").text(" " + printGameLine());
 		
 		brd_PHV_count = brd_HR_count;
 		if(brd_HR_flag){
-			if(brd_HR_piece == 'K')
+			if(brd_HR_piece === 'K')
 				BHV_flag = BOOL.TRUE;
 			else 
 				PHV_flag = BOOL.TRUE;
@@ -648,7 +648,7 @@ var THA = 2;
 var langSET = EN;
 
 $('#lang').click(function(){
-	if(langSET == EN) setTHA();
+	if(langSET === EN) setTHA();
 	else setEN();
 });
 
@@ -682,20 +682,20 @@ function initBoardSquares() {
 		light = lastLight ^ 1;
 		lastLight ^= 1;
 		rankName = "rank" + (rankIter + 1);	
-		t_rank = (GameController.BoardFlipped==BOOL.TRUE)?(7-rankIter):rankIter;
+		t_rank = (GameController.BoardFlipped===BOOL.TRUE)?(7-rankIter):rankIter;
 		for(fileIter = FILES.FILE_A; fileIter <= FILES.FILE_H; fileIter++) {			
 		    fileName = "file" + (fileIter + 1); 
-		    if(light==0) lightString="Light";
+		    if(light===0) lightString="Light";
 			else lightString="Dark";
-			t_file = (GameController.BoardFlipped==BOOL.TRUE)?(7-fileIter):fileIter;
-			if(fileIter == FILES.FILE_H && rankIter == RANKS.RANK_8) 
+			t_file = (GameController.BoardFlipped===BOOL.TRUE)?(7-fileIter):fileIter;
+			if(fileIter === FILES.FILE_H && rankIter === RANKS.RANK_8) 
 				divString = "<div class=\"Square clickElement " + rankName + " " + fileName + " " + lightString + "\">" +
 				"<span class=\"rankchar r" + (t_rank+1) +"\">"+( ranksChar_en[t_rank] ) + "</span>" + 
 				"<span class=\"filechar f" + String.fromCharCode('a'.charCodeAt() + t_file) + "\">" + (filesChar_en[t_file]) + "</span></div>";
-			else if(fileIter < FILES.FILE_H && rankIter == RANKS.RANK_8) 
+			else if(fileIter < FILES.FILE_H && rankIter === RANKS.RANK_8) 
 				divString = "<div class=\"Square clickElement " + rankName + " " + fileName + " " + lightString + "\">" +
 				"<span class=\"filechar f" + String.fromCharCode('a'.charCodeAt() + t_file) + "\">" + (filesChar_en[t_file]) + "</span></div>";
-			else if(fileIter == FILES.FILE_H && rankIter < RANKS.RANK_8){
+			else if(fileIter === FILES.FILE_H && rankIter < RANKS.RANK_8){
 				divString = "<div class=\"Square clickElement " + rankName + " " + fileName + " " + lightString + "\">" +
 				"<span class=\"rankchar r" + (t_rank+1) +"\">"+( ranksChar_en[t_rank] ) + "</span></div>";
 			}
@@ -705,7 +705,7 @@ function initBoardSquares() {
 			$("#Board").append(divString);
 		}
 	}	
-	if(langSET == EN) setEN(); else setTHA(); // HACK for coordinates.
+	if(langSET === EN) setEN(); else setTHA(); // HACK for coordinates.
 
 }
 
@@ -735,7 +735,7 @@ function SetInitialBoardPieces() {
 	for( sq = 0; sq < 64; ++sq) {
 		sq120 = SQ120(sq);
 		pce = brd_pieces[sq120]; // crucial here
-		if(GameController.BoardFlipped == BOOL.TRUE) {
+		if(GameController.BoardFlipped === BOOL.TRUE) {
 			sq120 = MIRROR120(sq120);
 		}
 		file = FilesBrd[sq120];
@@ -749,14 +749,14 @@ function SetInitialBoardPieces() {
 		}
 	}
 	
-	if(setupBoard == BOOL.TRUE) return;
+	if(setupBoard === BOOL.TRUE) return;
 	
 	brd_BHV_count = 0;
 	brd_PHV_count = 0;
 	BHV_flag = BOOL.FALSE;
 	PHV_flag = BOOL.FALSE;
 	
-	computerPlay = (Opponent == "comp")?BOOL.TRUE:BOOL.FALSE;
+	computerPlay = (Opponent === "comp")?BOOL.TRUE:BOOL.FALSE;
 	GameController.autoMove = BOOL.FALSE;
 	$("#AutoMove").text("Auto Move");
 }
@@ -774,7 +774,7 @@ GameController.autoMove = BOOL.FALSE;
 
 $("#AutoMove").click(function(){
 	GameController.autoMove ^= 1;
-	if(GameController.autoMove == BOOL.TRUE) {
+	if(GameController.autoMove === BOOL.TRUE) {
 		$("input:radio[name=opponent][value=comp]").prop("checked",true);
 		Opponent = "comp";
 		computerPlay = BOOL.TRUE;
@@ -836,7 +836,7 @@ $('#SetBoard').click(function (){
 });
 
 $(document).on('click','.PieceS', function (e) {	
-	if(setupBoard == BOOL.TRUE){
+	if(setupBoard === BOOL.TRUE){
 		var pPiece = [PIECES.wK, PIECES.wR, PIECES.wC, PIECES.wN, PIECES.wM, PIECES.wP, 
 					PIECES.bK, PIECES.bR, PIECES.bC, PIECES.bN, PIECES.bM, PIECES.bP]; 
 		var position = $("#SetPiece").position(); 
@@ -853,8 +853,8 @@ $(document).on('click','.PieceS', function (e) {
 				$(this).removeClass('SqSelected'); 
 		}); 
 		$( ".SquareS" ).each(function( index ) {    
-			if( ( rank == $(this).position().top / 60) && 
-				( file == $(this).position().left /60) ){   
+			if( ( rank === $(this).position().top / 60) && 
+				( file === $(this).position().left /60) ){   
 				$(this).addClass('SqSelected'); 
 			} 
 		}); 
@@ -874,7 +874,7 @@ var selectedPiece = PIECES.EMPTY;
 
 $("input:radio[name=STM]").click(function(){
 	StmSet = $(this).val();
-	if(StmSet=="b") brd_side = COLOURS.BLACK; 
+	if(StmSet==="b") brd_side = COLOURS.BLACK; 
 	else brd_side = COLOURS.WHITE; 
 	$("#currentFenSpan").text(BoardToFen());
 	$('#fenIn').val(BoardToFen());

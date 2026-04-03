@@ -5,7 +5,7 @@ function GetPvLine(depth) {;
 	var move = ProbePvTable();
 	var count = 0;
 	
-	while(move != NOMOVE && count < depth) {
+	while(move !== NOMOVE && count < depth) {
 	
 		if( MoveExists(move) ) {
 			MakeMove(move);
@@ -36,7 +36,7 @@ function ProbePvTable() {
 
 	var index = brd_posKey % PVENTRIES;	
 	
-	if( brd_PvTable[index].posKey == brd_posKey ) {
+	if( brd_PvTable[index].posKey === brd_posKey ) {
 		return brd_PvTable[index].move;
 	}
 	

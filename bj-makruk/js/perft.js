@@ -2,7 +2,7 @@ var perft_leafNodes;
 
 function Perft(depth) { 
 /*	MakeNullMove();
-	if(brd_posKey !=  GeneratePosKey())  {
+	if(brd_posKey !==  GeneratePosKey())  {
 		console.log(printGameLine());
 		PrintBoard();
 		srch_stop = BOOL.TRUE;
@@ -10,14 +10,14 @@ function Perft(depth) {
 	}   
 	
 	TakeNullMove();
-	if(brd_posKey !=  GeneratePosKey())  {
+	if(brd_posKey !==  GeneratePosKey())  {
 		console.log(printGameLine());
 		PrintBoard();
 		srch_stop = BOOL.TRUE;
 		console.log('Hash Error After Take');
 	}   
 */
-	if(depth == 0) {
+	if(depth === 0) {
         perft_leafNodes++;
         return;
     }	
@@ -29,7 +29,7 @@ function Perft(depth) {
 	for(index = brd_moveListStart[brd_ply]; index < brd_moveListStart[brd_ply + 1]; ++index) {
 	
 		move = brd_moveList[index];	
-		if(MakeMove(move) == BOOL.FALSE) {
+		if(MakeMove(move) === BOOL.FALSE) {
 			continue;
 		}		
 		Perft(depth-1);
@@ -51,7 +51,7 @@ function PerftTest(depth) {
 	for(index = brd_moveListStart[brd_ply]; index < brd_moveListStart[brd_ply + 1]; ++index) {
 	
 		move = brd_moveList[index];	
-		if(MakeMove(move) == BOOL.FALSE) {
+		if(MakeMove(move) === BOOL.FALSE) {
 			continue;
 		}	
 		moveNum++;	

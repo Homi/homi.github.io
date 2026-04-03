@@ -41,7 +41,7 @@ function IsRepetition() {
 
 	var index = 0;
 	for(index = 0; index < brd_hisPly-1; ++index) {	
-		if(brd_posKey == brd_history[index].posKey) {
+		if(brd_posKey === brd_history[index].posKey) {
 			return BOOL.TRUE;
 		}
 	}	
@@ -79,7 +79,7 @@ function ClearForSearch() {
 
 function Quiescence(alpha, beta) {
 
-	if((srch_nodes & 2047) == 0) CheckUp();
+	if((srch_nodes & 2047) === 0) CheckUp();
 	
 	srch_nodes++;
 	if(IsRepetition() ) {
@@ -105,9 +105,9 @@ function Quiescence(alpha, beta) {
 	Score = -INFINITE;
 	var PvMove = ProbePvTable();	
 	
-	if( PvMove != NOMOVE) {
+	if( PvMove !== NOMOVE) {
 		for(MoveNum = brd_moveListStart[brd_ply]; MoveNum < brd_moveListStart[brd_ply + 1]; ++MoveNum) {
-			if( brd_moveList[MoveNum] == PvMove) {
+			if( brd_moveList[MoveNum] === PvMove) {
 				brd_moveScores[MoveNum].score = 2000000;
 				break;
 			}
@@ -118,17 +118,17 @@ function Quiescence(alpha, beta) {
 			
 		PickNextMove(MoveNum);	
 		
-        if ( MakeMove(brd_moveList[MoveNum]) == BOOL.FALSE)  {
+        if ( MakeMove(brd_moveList[MoveNum]) === BOOL.FALSE)  {
             continue;
         }
         
 		Legal++;
 		Score = -Quiescence( -beta, -alpha);
 		TakeMove();					
-		if(srch_stop == BOOL.TRUE) return 0;
+		if(srch_stop === BOOL.TRUE) return 0;
 		if(Score > alpha) {
 			if(Score >= beta) {
-				if(Legal==1) {
+				if(Legal===1) {
 					srch_fhf++;
 				}
 				srch_fh++;				
@@ -140,7 +140,7 @@ function Quiescence(alpha, beta) {
 		}		
     }
 	
-	if(alpha != OldAlpha) {
+	if(alpha !== OldAlpha) {
 		StorePvMove(BestMove);
 	}
 	
@@ -153,11 +153,11 @@ function AlphaBeta(alpha, beta, depth, DoNull) {
 		return Quiescence(alpha, beta);
 		// return EvalPosition();
 	}	
-	if((srch_nodes & 2047) == 0) CheckUp();
+	if((srch_nodes & 2047) === 0) CheckUp();
 	
 	srch_nodes++;
 		
-	if( IsRepetition() && brd_ply != 0) {
+	if( IsRepetition() && brd_ply !== 0) {
 		return 0;
 	}
 	
@@ -167,14 +167,14 @@ function AlphaBeta(alpha, beta, depth, DoNull) {
 	
 	var InCheck = SqAttacked(brd_pList[PCEINDEX(Kings[brd_side],0)], brd_side^1);
 	
-	if(InCheck == BOOL.TRUE) {
+	if(InCheck === BOOL.TRUE) {
 		depth++;
 	}
 	
 	var Score = -INFINITE;
 	
-	if( DoNull == BOOL.TRUE && BOOL.FALSE == InCheck && 
-			brd_ply != 0 && (brd_material[brd_side] > 50200) && depth >= 4) {
+	if( DoNull === BOOL.TRUE && BOOL.FALSE === InCheck && 
+			brd_ply !== 0 && (brd_material[brd_side] > 50200) && depth >= 4) {
 		
 		brd_side ^= 1;
     	HASH_SIDE();
@@ -184,7 +184,7 @@ function AlphaBeta(alpha, beta, depth, DoNull) {
 		brd_side ^= 1;
     	HASH_SIDE();
 		
-		if(srch_stop == BOOL.TRUE) return 0;	
+		if(srch_stop === BOOL.TRUE) return 0;	
 		if (Score >= beta) {		 
 		  return beta;
 		}	
@@ -199,9 +199,9 @@ function AlphaBeta(alpha, beta, depth, DoNull) {
 	Score = -INFINITE;
 	var PvMove = ProbePvTable();		
 	
-	if( PvMove != NOMOVE) {
+	if( PvMove !== NOMOVE) {
 		for(MoveNum = brd_moveListStart[brd_ply]; MoveNum < brd_moveListStart[brd_ply + 1]; ++MoveNum) {
-			if( brd_moveList[MoveNum] == PvMove) {
+			if( brd_moveList[MoveNum] === PvMove) {
 				brd_moveScores[MoveNum].score = 2000000;
 				break;
 			}
@@ -212,23 +212,23 @@ function AlphaBeta(alpha, beta, depth, DoNull) {
 			
 		PickNextMove(MoveNum);	
 		
-        if ( MakeMove(brd_moveList[MoveNum]) == BOOL.FALSE)  {
+        if ( MakeMove(brd_moveList[MoveNum]) === BOOL.FALSE)  {
             continue;
         }
         
 		Legal++;
 		Score = -AlphaBeta( -beta, -alpha, depth-1, BOOL.TRUE);
 		TakeMove();						
-		if(srch_stop == BOOL.TRUE) return 0;				
+		if(srch_stop === BOOL.TRUE) return 0;				
 		
 		if(Score > alpha) {
 			if(Score >= beta) {
-				if(Legal==1) {
+				if(Legal===1) {
 					srch_fhf++;
 				}
 				srch_fh++;	
 				
-				if((brd_moveList[MoveNum] & MFLAGCAP) == 0) {
+				if((brd_moveList[MoveNum] & MFLAGCAP) === 0) {
 					brd_searchKillers[MAXDEPTH + brd_ply] = brd_searchKillers[brd_ply];
 					brd_searchKillers[brd_ply] = brd_moveList[MoveNum];
 				}				
@@ -236,13 +236,13 @@ function AlphaBeta(alpha, beta, depth, DoNull) {
 			}
 			alpha = Score;
 			BestMove = brd_moveList[MoveNum];
-			if((BestMove & MFLAGCAP) == 0) {
+			if((BestMove & MFLAGCAP) === 0) {
 				brd_searchHistory[ brd_pieces[FROMSQ(BestMove)] * BRD_SQ_NUM + TOSQ(BestMove) ] += depth;
 			}
 		}		
     }
 	
-	if(Legal == 0) {
+	if(Legal === 0) {
 		if(InCheck) {
 			return -MATE + brd_ply;
 		} else {
@@ -250,7 +250,7 @@ function AlphaBeta(alpha, beta, depth, DoNull) {
 		}
 	}
 	
-	if(alpha != OldAlpha) {		
+	if(alpha !== OldAlpha) {		
 		StorePvMove(BestMove);
 	}
 	
@@ -290,10 +290,10 @@ function SearchPosition() {
 	
 	ClearForSearch();
 	
-	if(GameController.BookLoaded == BOOL.TRUE) {
+	if(GameController.BookLoaded === BOOL.TRUE) {
 		bestMove = BookMove();
 	
-		if(bestMove != NOMOVE) {
+		if(bestMove !== NOMOVE) {
 			$("#OrderingOut").text("Ordering:");
 			$("#DepthOut").text("Depth: ");
 			$("#ScoreOut").text("Score:");
@@ -310,12 +310,12 @@ function SearchPosition() {
 	for( currentDepth = 1; currentDepth <= srch_depth; ++currentDepth ) {						
 		
 		bestScore = AlphaBeta(-INFINITE, INFINITE, currentDepth, BOOL.TRUE);
-		if(srch_stop == BOOL.TRUE) break;
+		if(srch_stop === BOOL.TRUE) break;
 		pvNum = GetPvLine(currentDepth);
 		bestMove = brd_PvArray[0];
 		line = ("Depth:" + currentDepth + " best:" + PrMove(bestMove) + " Score:" + bestScore + " nodes:" + srch_nodes); 
 		
-		if(currentDepth!=1) {
+		if(currentDepth!==1) {
 			line += (" Ordering:" + ((srch_fhf/srch_fh)*100).toFixed(2) + "%");
 		}
 		console.log(line);

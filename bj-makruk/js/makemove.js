@@ -11,7 +11,7 @@ function ClearPiece(sq) {
     brd_material[col] -= PieceVal[pce];
 	brd_colPceNum[col]--;
 	for(index = 0; index < brd_pceNum[pce]; ++index) {
-		if(brd_pList[PCEINDEX(pce,index)] == sq) {
+		if(brd_pList[PCEINDEX(pce,index)] === sq) {
 			t_pceNum = index;
 			break;
 		}
@@ -24,37 +24,37 @@ function AddPiece(sq, pce) {
 	
 	var col = PieceCol[pce];
 
-	if( pce == PIECES.wK ){
-		if(brd_pceNum[pce] == 1) return BOOL.FALSE;
-		if(brd_pieces[sq+ 1] == PIECES.bK) return BOOL.FALSE;
-		if(brd_pieces[sq- 1] == PIECES.bK) return BOOL.FALSE;
-		if(brd_pieces[sq+10] == PIECES.bK) return BOOL.FALSE;
-		if(brd_pieces[sq-10] == PIECES.bK) return BOOL.FALSE;
-		if(brd_pieces[sq+ 9] == PIECES.bK) return BOOL.FALSE;
-		if(brd_pieces[sq- 9] == PIECES.bK) return BOOL.FALSE;
-		if(brd_pieces[sq+11] == PIECES.bK) return BOOL.FALSE;
-		if(brd_pieces[sq-11] == PIECES.bK) return BOOL.FALSE;
+	if( pce === PIECES.wK ){
+		if(brd_pceNum[pce] === 1) return BOOL.FALSE;
+		if(brd_pieces[sq+ 1] === PIECES.bK) return BOOL.FALSE;
+		if(brd_pieces[sq- 1] === PIECES.bK) return BOOL.FALSE;
+		if(brd_pieces[sq+10] === PIECES.bK) return BOOL.FALSE;
+		if(brd_pieces[sq-10] === PIECES.bK) return BOOL.FALSE;
+		if(brd_pieces[sq+ 9] === PIECES.bK) return BOOL.FALSE;
+		if(brd_pieces[sq- 9] === PIECES.bK) return BOOL.FALSE;
+		if(brd_pieces[sq+11] === PIECES.bK) return BOOL.FALSE;
+		if(brd_pieces[sq-11] === PIECES.bK) return BOOL.FALSE;
 	}
-	if( pce == PIECES.bK ){
-		if(brd_pceNum[pce] == 1) return BOOL.FALSE;
-		if(brd_pieces[sq+ 1] == PIECES.wK) return BOOL.FALSE;
-		if(brd_pieces[sq- 1] == PIECES.wK) return BOOL.FALSE;
-		if(brd_pieces[sq+10] == PIECES.wK) return BOOL.FALSE;
-		if(brd_pieces[sq-10] == PIECES.wK) return BOOL.FALSE;
-		if(brd_pieces[sq+ 9] == PIECES.wK) return BOOL.FALSE;
-		if(brd_pieces[sq- 9] == PIECES.wK) return BOOL.FALSE;
-		if(brd_pieces[sq+11] == PIECES.wK) return BOOL.FALSE;
-		if(brd_pieces[sq-11] == PIECES.wK) return BOOL.FALSE;
+	if( pce === PIECES.bK ){
+		if(brd_pceNum[pce] === 1) return BOOL.FALSE;
+		if(brd_pieces[sq+ 1] === PIECES.wK) return BOOL.FALSE;
+		if(brd_pieces[sq- 1] === PIECES.wK) return BOOL.FALSE;
+		if(brd_pieces[sq+10] === PIECES.wK) return BOOL.FALSE;
+		if(brd_pieces[sq-10] === PIECES.wK) return BOOL.FALSE;
+		if(brd_pieces[sq+ 9] === PIECES.wK) return BOOL.FALSE;
+		if(brd_pieces[sq- 9] === PIECES.wK) return BOOL.FALSE;
+		if(brd_pieces[sq+11] === PIECES.wK) return BOOL.FALSE;
+		if(brd_pieces[sq-11] === PIECES.wK) return BOOL.FALSE;
 	}
-	if( PieceRook[pce] == BOOL.TRUE &&  brd_pceNum[pce] == 2) return BOOL.FALSE;
-	if( PieceCon[pce] == BOOL.TRUE &&  brd_pceNum[pce] == 2) return BOOL.FALSE;
-	if( PieceKnight[pce] == BOOL.TRUE &&  brd_pceNum[pce] == 2) return BOOL.FALSE;
-	if( pce == PIECES.wP && (RanksBrd[sq] < 2 || RanksBrd[sq] > 4 || brd_pceNum[pce] == 8)) return BOOL.FALSE;
-	if( pce == PIECES.bP && (RanksBrd[sq] < 3 || RanksBrd[sq] > 5 || brd_pceNum[pce] == 8)) return BOOL.FALSE;
-	if( pce == PIECES.wM || pce == PIECES.wP)
-		if(brd_pceNum[PIECES.wM] + brd_pceNum[PIECES.wP] == 9) return BOOL.FALSE;
-	if( pce == PIECES.bM || pce == PIECES.bP)
-		if(brd_pceNum[PIECES.bM] + brd_pceNum[PIECES.bP] == 9) return BOOL.FALSE;
+	if( PieceRook[pce] === BOOL.TRUE &&  brd_pceNum[pce] === 2) return BOOL.FALSE;
+	if( PieceCon[pce] === BOOL.TRUE &&  brd_pceNum[pce] === 2) return BOOL.FALSE;
+	if( PieceKnight[pce] === BOOL.TRUE &&  brd_pceNum[pce] === 2) return BOOL.FALSE;
+	if( pce === PIECES.wP && (RanksBrd[sq] < 2 || RanksBrd[sq] > 4 || brd_pceNum[pce] === 8)) return BOOL.FALSE;
+	if( pce === PIECES.bP && (RanksBrd[sq] < 3 || RanksBrd[sq] > 5 || brd_pceNum[pce] === 8)) return BOOL.FALSE;
+	if( pce === PIECES.wM || pce === PIECES.wP)
+		if(brd_pceNum[PIECES.wM] + brd_pceNum[PIECES.wP] === 9) return BOOL.FALSE;
+	if( pce === PIECES.bM || pce === PIECES.bP)
+		if(brd_pceNum[PIECES.bM] + brd_pceNum[PIECES.bP] === 9) return BOOL.FALSE;
 	
     HASH_PCE(pce,sq);
 	brd_pieces[sq] = pce;  	
@@ -75,7 +75,7 @@ function MovePiece(from, to) {
 	HASH_PCE(pce,to);
 	brd_pieces[to] = pce;	
 	for(index = 0; index < brd_pceNum[pce]; ++index) {
-		if(brd_pList[PCEINDEX(pce,index)] == from) {
+		if(brd_pList[PCEINDEX(pce,index)] === from) {
 			brd_pList[PCEINDEX(pce,index)] = to;
 			break;
 		}
@@ -96,7 +96,7 @@ function MakeMove(move) {
 	brd_history[brd_hisPly].brd_HR_count = brd_HR_count;
 
 	var captured = CAPTURED(move);
-	if(captured != PIECES.EMPTY) {
+	if(captured !== PIECES.EMPTY) {
         ClearPiece(to);
     }
 	brd_hisPly++;
@@ -104,7 +104,7 @@ function MakeMove(move) {
 	MovePiece(from, to);
 	
 	var prPce = PROMOTED(move);
-    if(prPce != PIECES.EMPTY)   {       
+    if(prPce !== PIECES.EMPTY)   {       
         ClearPiece(to);
         AddPiece(to, prPce);
     }
@@ -135,12 +135,12 @@ function TakeMove() {
     HASH_SIDE();
 	MovePiece(to, from);
 	var captured = CAPTURED(move);
-    if(captured != PIECES.EMPTY) {      
+    if(captured !== PIECES.EMPTY) {      
         AddPiece(to, captured);
     }
-	if(PROMOTED(move) != PIECES.EMPTY)   {        
+	if(PROMOTED(move) !== PIECES.EMPTY)   {        
         ClearPiece(from);
-        AddPiece(from, (PieceCol[PROMOTED(move)] == COLOURS.WHITE ? PIECES.wP : PIECES.bP));
+        AddPiece(from, (PieceCol[PROMOTED(move)] === COLOURS.WHITE ? PIECES.wP : PIECES.bP));
     }
 }
 

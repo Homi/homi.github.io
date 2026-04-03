@@ -2,7 +2,7 @@
 
 function SqFromAlg(moveAlg) {
 
-	if(moveAlg.length != 2) return SQUARES.NO_SQ;
+	if(moveAlg.length !== 2) return SQUARES.NO_SQ;
 	
 	if(moveAlg[0] > 'h' || moveAlg[0] < 'a' ) return SQUARES.NO_SQ;
 	if(moveAlg[1] > '8' || moveAlg[1] < '1' ) return SQUARES.NO_SQ;
@@ -43,7 +43,7 @@ function PrMove(move) {
 	MvStr = String.fromCharCode('a'.charCodeAt() + ff) + String.fromCharCode('1'.charCodeAt() + rf) + 
 				String.fromCharCode('a'.charCodeAt() + ft) + String.fromCharCode('1'.charCodeAt() + rt)
 	var promoted = PROMOTED(move);
-	if(promoted != PIECES.EMPTY) MvStr += 'm';
+	if(promoted !== PIECES.EMPTY) MvStr += 'm';
 	return MvStr;
 }
 
@@ -55,10 +55,10 @@ function ParseMove(from, to) {
 	var found = BOOL.FALSE;
 	for(index = brd_moveListStart[brd_ply]; index < brd_moveListStart[brd_ply + 1]; ++index) {	
 		Move = brd_moveList[index];	
-		if(FROMSQ(Move)==from && TOSQ(Move)==to) {
+		if(FROMSQ(Move)===from && TOSQ(Move)===to) {
 			PromPce = PROMOTED(Move);
-			if(PromPce!=PIECES.EMPTY) {
-				if( (PromPce==PIECES.wM && brd_side==COLOURS.WHITE) || (PromPce==PIECES.bM && brd_side==COLOURS.BLACK) ) {
+			if(PromPce!==PIECES.EMPTY) {
+				if( (PromPce===PIECES.wM && brd_side===COLOURS.WHITE) || (PromPce===PIECES.bM && brd_side===COLOURS.BLACK) ) {
 					found = BOOL.TRUE;
 					break;
 				}
@@ -68,8 +68,8 @@ function ParseMove(from, to) {
 			break;
 		}
     }
-	if(found != BOOL.FALSE) {
-		if(MakeMove(Move) == BOOL.FALSE) {
+	if(found !== BOOL.FALSE) {
+		if(MakeMove(Move) === BOOL.FALSE) {
 			return NOMOVE;
 		}
 		TakeMove();

@@ -52,28 +52,28 @@ function BoardToFen() {
 		for(file = FILES.FILE_A; file <= FILES.FILE_H; file++) {
 			sq = FR2SQ(file,rank);
 			piece = brd_pieces[sq];
-			if(piece == PIECES.EMPTY) {
+			if(piece === PIECES.EMPTY) {
 				emptyCount++;
 			} else {
-				if(emptyCount!=0) {
+				if(emptyCount!==0) {
 					fenStr += String.fromCharCode('0'.charCodeAt() + emptyCount);
 				}
 				emptyCount = 0;
 				fenStr += PceChar[piece];
 			}
 		}
-		if(emptyCount!=0) {
+		if(emptyCount!==0) {
 			fenStr += String.fromCharCode('0'.charCodeAt() + emptyCount);
 		}
 		
-		if(rank!=RANKS.RANK_1) {
+		if(rank!==RANKS.RANK_1) {
 			fenStr += '/'
 		} else {
 			fenStr += ' ';
 		}
 	}
 	fenStr += SideChar[brd_side] + ' ';
-	if(brd_HR_flag == BOOL.FALSE)
+	if(brd_HR_flag === BOOL.FALSE)
 		fenStr += '- ';
 	else
 		fenStr += brd_HR_piece + ' ';
@@ -81,7 +81,7 @@ function BoardToFen() {
 	fenStr += brd_HR_count + ' ';
 
 	var tempHalfMove = brd_hisPly;
-	if(brd_side == COLOURS.BLACK) {
+	if(brd_side === COLOURS.BLACK) {
 		tempHalfMove++;
 	}
 	fenStr += (tempHalfMove/2).toFixed(0);	
@@ -97,7 +97,7 @@ function CheckBoard() {
 	for(t_piece = PIECES.wP; t_piece <= PIECES.bK; ++t_piece) {
 		for(t_pce_num = 0; t_pce_num < brd_pceNum[t_piece]; ++t_pce_num) {
 			sq120 = brd_pList[PCEINDEX(t_piece,t_pce_num)];
-			if(brd_pieces[sq120]!=t_piece) {
+			if(brd_pieces[sq120]!==t_piece) {
 				console.log('Error Pce Lists');
 				return BOOL.FALSE;
 			}
@@ -111,20 +111,20 @@ function CheckBoard() {
 		t_material[PieceCol[t_piece]] += PieceVal[t_piece];
 	}
 	for(t_piece = PIECES.wP; t_piece <= PIECES.bK; ++t_piece) {
-		if(t_pceNum[t_piece]!=brd_pceNum[t_piece]) {
+		if(t_pceNum[t_piece]!==brd_pceNum[t_piece]) {
 				console.log('Error t_pceNum');
 				return BOOL.FALSE;
 			}	
 	}
-	if(t_material[COLOURS.WHITE]!=brd_material[COLOURS.WHITE] || t_material[COLOURS.BLACK]!=brd_material[COLOURS.BLACK]) {
+	if(t_material[COLOURS.WHITE]!==brd_material[COLOURS.WHITE] || t_material[COLOURS.BLACK]!==brd_material[COLOURS.BLACK]) {
 				console.log('Error t_material');
 				return BOOL.FALSE;
 			}		
-	if(brd_side!=COLOURS.WHITE && brd_side!=COLOURS.BLACK) {
+	if(brd_side!==COLOURS.WHITE && brd_side!==COLOURS.BLACK) {
 				console.log('Error brd_side');
 				return BOOL.FALSE;
 			}
-	if(GeneratePosKey()!=brd_posKey) {
+	if(GeneratePosKey()!==brd_posKey) {
 				console.log('Error brd_posKey');
 				return BOOL.FALSE;
 			}
@@ -145,7 +145,7 @@ function LineMatch(BookLine,gameline) {
 
 	for(var len = 0; len < gameline.length; ++len) {
 		if(len>=BookLine.length) { return BOOL.FALSE;	}	
-		if(gameline[len] != BookLine[len]) { return BOOL.FALSE;	}	
+		if(gameline[len] !== BookLine[len]) { return BOOL.FALSE;	}	
 	}
 	return BOOL.TRUE;
 }
@@ -155,11 +155,11 @@ function BookMove() {
 	var gameLine = printGameLine();
 	var bookMoves = [];
 	var lengthOfLineHack = gameLine.length;
-	if(gameLine.length == 0) lengthOfLineHack--;
+	if(gameLine.length === 0) lengthOfLineHack--;
 	for(var bookLineNum = 0; bookLineNum <brd_bookLines.length; ++bookLineNum) {
-		if(LineMatch(brd_bookLines[bookLineNum],gameLine) == BOOL.TRUE) {
+		if(LineMatch(brd_bookLines[bookLineNum],gameLine) === BOOL.TRUE) {
 			var move = brd_bookLines[bookLineNum].substr(lengthOfLineHack + 1, 4);
-			if(move.length==4) {
+			if(move.length===4) {
 				var from = SqFromAlg(move.substr(0,2));
 				var to = SqFromAlg(move.substr(2,2));
 				varInternalMove = ParseMove(from,to);
@@ -168,7 +168,7 @@ function BookMove() {
 		}
 	}
 	console.log("Total + " + bookMoves.length + " moves in array");
-	if(bookMoves.length==0) return NOMOVE;
+	if(bookMoves.length===0) return NOMOVE;
 	var num = Math.floor(Math.random()*bookMoves.length);
 	return bookMoves[num];
 }
@@ -189,7 +189,7 @@ function UpdateListsMaterial() {
 	for(index = 0; index < BRD_SQ_NUM; ++index) {
 		sq = index;
 		piece = brd_pieces[index];
-		if(piece != PIECES.OFFBOARD && piece != PIECES.EMPTY) {
+		if(piece !== PIECES.OFFBOARD && piece !== PIECES.EMPTY) {
 			colour = PieceCol[piece];		
 			brd_material[colour] += PieceVal[piece];
 			brd_pList[PCEINDEX(piece,brd_pceNum[piece])] = sq;
@@ -207,11 +207,11 @@ function GeneratePosKey() {
 	var piece = PIECES.EMPTY;
 	for(sq = 0; sq < BRD_SQ_NUM; ++sq) {
 		piece = brd_pieces[sq];
-		if(piece != PIECES.EMPTY && piece != SQUARES.OFFBOARD) {			
+		if(piece !== PIECES.EMPTY && piece !== SQUARES.OFFBOARD) {			
 			finalKey ^= PieceKeys[(piece * 120) + sq];
 		}
 	}
-	if(brd_side == COLOURS.WHITE) {
+	if(brd_side === COLOURS.WHITE) {
 		finalKey ^= SideKey;
 	}
 	
@@ -238,7 +238,7 @@ function PrintBoard() {
 	}
 	console.log(line);
 	console.log("side:" + SideChar[brd_side] );
-	if(brd_HR_flag == BOOL.TRUE)
+	if(brd_HR_flag === BOOL.TRUE)
 		console.log('honour rule (' + brd_HR_piece + '): ' + brd_HR_count); 
 	console.log("key:" + brd_posKey.toString(16));
 }
@@ -331,7 +331,7 @@ function ParseFen(fen) {
 		for (i = 0; i < count; i++) {			
             sq64 = rank * 8 + file;
 			sq120 = SQ120(sq64);
-            if (piece != PIECES.EMPTY) {
+            if (piece !== PIECES.EMPTY) {
                 brd_pieces[sq120] = piece;
             }
 			file++;
@@ -339,7 +339,7 @@ function ParseFen(fen) {
 		fenCnt++;
 	}	
 	
-	brd_side = (fen[fenCnt] == 'b') ? COLOURS.BLACK : COLOURS.WHITE;
+	brd_side = (fen[fenCnt] === 'b') ? COLOURS.BLACK : COLOURS.WHITE;
 	
     brd_posKey = GeneratePosKey();
     UpdateListsMaterial();
@@ -351,39 +351,39 @@ function SqAttacked(sq, side) {
 	var t_sq;
 	var index;
 	
-	if(side == COLOURS.WHITE) {
-		if(brd_pieces[sq-11] == PIECES.wP || brd_pieces[sq-9] == PIECES.wP) {
+	if(side === COLOURS.WHITE) {
+		if(brd_pieces[sq-11] === PIECES.wP || brd_pieces[sq-9] === PIECES.wP) {
 			return BOOL.TRUE;
 		}
 		//Con
 		for(index = 0; index < 5; ++index) {		
 			pce = brd_pieces[sq + BcDir[index]];
-			if(pce != SQUARES.OFFBOARD && PieceCon[pce] == BOOL.TRUE && PieceCol[pce] == side) {
+			if(pce !== SQUARES.OFFBOARD && PieceCon[pce] === BOOL.TRUE && PieceCol[pce] === side) {
 				return BOOL.TRUE;
 			}
 		}
 	} else {
-		if(brd_pieces[sq+11] == PIECES.bP || brd_pieces[sq+9] == PIECES.bP) {
+		if(brd_pieces[sq+11] === PIECES.bP || brd_pieces[sq+9] === PIECES.bP) {
 			return BOOL.TRUE;
 		}
 		//Con
 		for(index = 0; index < 5; ++index) {		
 			pce = brd_pieces[sq + WcDir[index]];
-			if(pce != SQUARES.OFFBOARD && PieceCon[pce] == BOOL.TRUE && PieceCol[pce] == side) {
+			if(pce !== SQUARES.OFFBOARD && PieceCon[pce] === BOOL.TRUE && PieceCol[pce] === side) {
 				return BOOL.TRUE;
 			}
 		}
 	}
 	for(index = 0; index < 4; ++index) {		
 		pce = brd_pieces[sq + MeDir[index]];
-		if(pce != SQUARES.OFFBOARD && PieceMed[pce] == BOOL.TRUE && PieceCol[pce] == side) {
+		if(pce !== SQUARES.OFFBOARD && PieceMed[pce] === BOOL.TRUE && PieceCol[pce] === side) {
 			return BOOL.TRUE;
 		}
 	}
 	
 	for(index = 0; index < 8; ++index) {		
 		pce = brd_pieces[sq + KnDir[index]];
-		if(pce != SQUARES.OFFBOARD && PieceKnight[pce] == BOOL.TRUE && PieceCol[pce] == side) {
+		if(pce !== SQUARES.OFFBOARD && PieceKnight[pce] === BOOL.TRUE && PieceCol[pce] === side) {
 			return BOOL.TRUE;
 		}
 	}
@@ -392,9 +392,9 @@ function SqAttacked(sq, side) {
 		dir = RkDir[index];
 		t_sq = sq + dir;
 		pce = brd_pieces[t_sq];
-		while(pce != SQUARES.OFFBOARD) {
-			if(pce != PIECES.EMPTY) {
-				if(PieceRook[pce] == BOOL.TRUE && PieceCol[pce] == side) {
+		while(pce !== SQUARES.OFFBOARD) {
+			if(pce !== PIECES.EMPTY) {
+				if(PieceRook[pce] === BOOL.TRUE && PieceCol[pce] === side) {
 					return BOOL.TRUE;
 				}
 				break;
@@ -406,7 +406,7 @@ function SqAttacked(sq, side) {
 
 	for(index = 0; index < 8; ++index) {		
 		pce = brd_pieces[sq + KiDir[index]];
-		if(pce != SQUARES.OFFBOARD && PieceKing[pce] == BOOL.TRUE && PieceCol[pce] == side) {
+		if(pce !== SQUARES.OFFBOARD && PieceKing[pce] === BOOL.TRUE && PieceCol[pce] === side) {
 			return BOOL.TRUE;
 		}
 	}
@@ -424,7 +424,7 @@ function PrintSqAttacked() {
 		var line =((rank+1) + "  ");
 		for(file = FILES.FILE_A; file <= FILES.FILE_H; file++) {
 			sq = FR2SQ(file,rank);
-			if(SqAttacked(sq, COLOURS.BLACK) == BOOL.TRUE) piece = "X";
+			if(SqAttacked(sq, COLOURS.BLACK) === BOOL.TRUE) piece = "X";
 			else piece = "-";
 			line += (" " + piece + " ");
 		}

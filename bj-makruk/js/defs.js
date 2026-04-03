@@ -140,7 +140,7 @@ function RAND_32() {
 }
 
 function SQOFFBOARD(sq) {
-	if(FilesBrd[sq]==SQUARES.OFFBOARD) return BOOL.TRUE;
+	if(FilesBrd[sq]===SQUARES.OFFBOARD) return BOOL.TRUE;
 	return BOOL.FALSE;	
 }
 

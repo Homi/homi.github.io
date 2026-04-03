@@ -28,11 +28,11 @@ function MoveExists(move) {
 	var moveFound = NOMOVE;
 	for(index = brd_moveListStart[brd_ply]; index < brd_moveListStart[brd_ply + 1]; ++index) {
 		moveFound = brd_moveList[index];	
-		if(MakeMove(moveFound) == BOOL.FALSE) {
+		if(MakeMove(moveFound) === BOOL.FALSE) {
 			continue;
 		}				
 		TakeMove();
-		if(move == moveFound) {
+		if(move === moveFound) {
 			return BOOL.TRUE;
 		}
 	}
@@ -48,9 +48,9 @@ function AddCaptureMove(move) {
 function AddQuietMove(move) {
 
 	brd_moveList[brd_moveListStart[brd_ply + 1]] = move;
-	if(brd_searchKillers[brd_ply] == move) {	
+	if(brd_searchKillers[brd_ply] === move) {	
 		brd_moveScores[brd_moveListStart[brd_ply + 1]] = 900000;
-	} else if(brd_searchKillers[MAXDEPTH + brd_ply] == move) {	
+	} else if(brd_searchKillers[MAXDEPTH + brd_ply] === move) {	
 		brd_moveScores[brd_moveListStart[brd_ply + 1]] = 800000;
 	} else {	
 		brd_moveScores[brd_moveListStart[brd_ply + 1]] = brd_searchHistory[ brd_pieces[FROMSQ(move)] * BRD_SQ_NUM + TOSQ(move) ];
@@ -60,7 +60,7 @@ function AddQuietMove(move) {
 
 function AddWhitePawnCaptureMove(from, to, cap) {
 
-	if(RanksBrd[from]==RANKS.RANK_5) {
+	if(RanksBrd[from]===RANKS.RANK_5) {
 		AddCaptureMove(MOVE(from,to,cap,PIECES.wM,0));
 	} else {
 		AddCaptureMove(MOVE(from,to,cap,PIECES.EMPTY,0));	
@@ -69,7 +69,7 @@ function AddWhitePawnCaptureMove(from, to, cap) {
 
 function AddWhitePawnQuietMove(from, to) {
 
-	if(RanksBrd[from]==RANKS.RANK_5) {
+	if(RanksBrd[from]===RANKS.RANK_5) {
 		AddQuietMove(MOVE(from,to,PIECES.EMPTY,PIECES.wM,0));
 	} else {
 		AddQuietMove(MOVE(from,to,PIECES.EMPTY,PIECES.EMPTY,0));	
@@ -78,7 +78,7 @@ function AddWhitePawnQuietMove(from, to) {
 
 function AddBlackPawnCaptureMove(from, to, cap) {
 
-	if(RanksBrd[from]==RANKS.RANK_4) {
+	if(RanksBrd[from]===RANKS.RANK_4) {
 		AddCaptureMove(MOVE(from,to,cap,PIECES.bM,0));
 	} else {
 		AddCaptureMove(MOVE(from,to,cap,PIECES.EMPTY,0));	
@@ -87,7 +87,7 @@ function AddBlackPawnCaptureMove(from, to, cap) {
 
 function AddBlackPawnQuietMove(from, to) {
 
-	if(RanksBrd[from]==RANKS.RANK_4) {
+	if(RanksBrd[from]===RANKS.RANK_4) {
 		AddQuietMove(MOVE(from,to,PIECES.EMPTY,PIECES.bM,0));
 	} else {
 		AddQuietMove(MOVE(from,to,PIECES.EMPTY,PIECES.EMPTY,0));	
@@ -104,18 +104,18 @@ function GenerateMoves() {
 	var tsq;
 	var index;
 	brd_moveListStart[brd_ply + 1] = brd_moveListStart[brd_ply];
-	if(brd_side == COLOURS.WHITE) {
+	if(brd_side === COLOURS.WHITE) {
 		pceType = PIECES.wP;
 		for(pceNum = 0; pceNum < brd_pceNum[pceType]; ++pceNum) {
 			sq = brd_pList[PCEINDEX(pceType,pceNum)];
-			if(brd_pieces[sq + 10] == PIECES.EMPTY) {
+			if(brd_pieces[sq + 10] === PIECES.EMPTY) {
 				AddWhitePawnQuietMove(sq, sq+10);
 			} 
 			
-			if(SQOFFBOARD(sq + 9) == BOOL.FALSE && PieceCol[brd_pieces[sq + 9]] == COLOURS.BLACK) {
+			if(SQOFFBOARD(sq + 9) === BOOL.FALSE && PieceCol[brd_pieces[sq + 9]] === COLOURS.BLACK) {
 				AddWhitePawnCaptureMove(sq, sq+9, brd_pieces[sq + 9]);
 			}  
-			if(SQOFFBOARD(sq + 11) == BOOL.FALSE && PieceCol[brd_pieces[sq + 11]] == COLOURS.BLACK) {
+			if(SQOFFBOARD(sq + 11) === BOOL.FALSE && PieceCol[brd_pieces[sq + 11]] === COLOURS.BLACK) {
 				AddWhitePawnCaptureMove(sq, sq+11, brd_pieces[sq + 11]);
 			} 
 		}
@@ -125,15 +125,15 @@ function GenerateMoves() {
 		for(pceNum = 0; pceNum < brd_pceNum[pceType]; ++pceNum) {
 			sq = brd_pList[PCEINDEX(pceType,pceNum)];			
 			
-			if(brd_pieces[sq - 10] == PIECES.EMPTY) {
+			if(brd_pieces[sq - 10] === PIECES.EMPTY) {
 				AddBlackPawnQuietMove(sq, sq-10);
 			} 
 			
-			if(SQOFFBOARD(sq - 9) == BOOL.FALSE && PieceCol[brd_pieces[sq - 9]] == COLOURS.WHITE) {
+			if(SQOFFBOARD(sq - 9) === BOOL.FALSE && PieceCol[brd_pieces[sq - 9]] === COLOURS.WHITE) {
 				AddBlackPawnCaptureMove(sq, sq-9, brd_pieces[sq - 9]);
 			} 
 			
-			if(SQOFFBOARD(sq - 11) == BOOL.FALSE && PieceCol[brd_pieces[sq - 11]] == COLOURS.WHITE) {
+			if(SQOFFBOARD(sq - 11) === BOOL.FALSE && PieceCol[brd_pieces[sq - 11]] === COLOURS.WHITE) {
 				AddBlackPawnCaptureMove(sq, sq-11, brd_pieces[sq - 11]);
 			} 
 		}
@@ -141,16 +141,16 @@ function GenerateMoves() {
 	} 
 	pceIndex = LoopSlideIndex[brd_side];
 	pce = LoopSlidePce[pceIndex++];
-	while( pce != 0) {			
+	while( pce !== 0) {			
 		for(pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
 			sq = brd_pList[PCEINDEX(pce,pceNum)];
 			
 			for(index = 0; index < DirNum[pce]; ++index) {
 				dir = PceDir[pce][index];
 				t_sq = sq + dir;
-				while(SQOFFBOARD(t_sq)==BOOL.FALSE) {				
-					if(brd_pieces[t_sq] != PIECES.EMPTY) {
-						if( PieceCol[brd_pieces[t_sq]] == brd_side ^ 1) {
+				while(SQOFFBOARD(t_sq)===BOOL.FALSE) {				
+					if(brd_pieces[t_sq] !== PIECES.EMPTY) {
+						if( PieceCol[brd_pieces[t_sq]] === brd_side ^ 1) {
 							AddCaptureMove(MOVE(sq, t_sq, brd_pieces[t_sq], PIECES.EMPTY, 0));
 						}
 						break;
@@ -164,17 +164,17 @@ function GenerateMoves() {
 	}
 	pceIndex = LoopNonSlideIndex[brd_side];
 	pce = LoopNonSlidePce[pceIndex++];
-	while( pce != 0) {	
+	while( pce !== 0) {	
 		for(pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
 			sq = brd_pList[PCEINDEX(pce,pceNum)];			
 			for(index = 0; index < DirNum[pce]; ++index) {
 				dir = PceDir[pce][index];
 				t_sq = sq + dir;
-				if(SQOFFBOARD(t_sq) == BOOL.TRUE) {				    
+				if(SQOFFBOARD(t_sq) === BOOL.TRUE) {				    
 					continue;
 				}				
-				if(brd_pieces[t_sq] != PIECES.EMPTY) {
-					if( PieceCol[brd_pieces[t_sq]] == brd_side ^ 1) {
+				if(brd_pieces[t_sq] !== PIECES.EMPTY) {
+					if( PieceCol[brd_pieces[t_sq]] === brd_side ^ 1) {
 						AddCaptureMove(MOVE(sq, t_sq, brd_pieces[t_sq], PIECES.EMPTY, 0));
 					}
 					continue;
@@ -196,15 +196,15 @@ function GenerateCaptures() {
 	var tsq;
 	var index;
 	brd_moveListStart[brd_ply + 1] = brd_moveListStart[brd_ply];
-	if(brd_side == COLOURS.WHITE) {
+	if(brd_side === COLOURS.WHITE) {
 		pceType = PIECES.wP;
 		for(pceNum = 0; pceNum < brd_pceNum[pceType]; ++pceNum) {
 			sq = brd_pList[PCEINDEX(pceType,pceNum)];			
 			
-			if(SQOFFBOARD(sq + 9) == BOOL.FALSE && PieceCol[brd_pieces[sq + 9]] == COLOURS.BLACK) {
+			if(SQOFFBOARD(sq + 9) === BOOL.FALSE && PieceCol[brd_pieces[sq + 9]] === COLOURS.BLACK) {
 				AddWhitePawnCaptureMove(sq, sq+9, brd_pieces[sq + 9]);
 			}  
-			if(SQOFFBOARD(sq + 11) == BOOL.FALSE && PieceCol[brd_pieces[sq + 11]] == COLOURS.BLACK) {
+			if(SQOFFBOARD(sq + 11) === BOOL.FALSE && PieceCol[brd_pieces[sq + 11]] === COLOURS.BLACK) {
 				AddWhitePawnCaptureMove(sq, sq+11, brd_pieces[sq + 11]);
 			} 
 		}
@@ -213,10 +213,10 @@ function GenerateCaptures() {
 		pceType = PIECES.bP;
 		for(pceNum = 0; pceNum < brd_pceNum[pceType]; ++pceNum) {
 			sq = brd_pList[PCEINDEX(pceType,pceNum)];				
-			if(SQOFFBOARD(sq - 9) == BOOL.FALSE && PieceCol[brd_pieces[sq - 9]] == COLOURS.WHITE) {
+			if(SQOFFBOARD(sq - 9) === BOOL.FALSE && PieceCol[brd_pieces[sq - 9]] === COLOURS.WHITE) {
 				AddBlackPawnCaptureMove(sq, sq-9, brd_pieces[sq - 9]);
 			} 
-			if(SQOFFBOARD(sq - 11) == BOOL.FALSE && PieceCol[brd_pieces[sq - 11]] == COLOURS.WHITE) {
+			if(SQOFFBOARD(sq - 11) === BOOL.FALSE && PieceCol[brd_pieces[sq - 11]] === COLOURS.WHITE) {
 				AddBlackPawnCaptureMove(sq, sq-11, brd_pieces[sq - 11]);
 			} 
 		}
@@ -224,15 +224,15 @@ function GenerateCaptures() {
 	} 
 	pceIndex = LoopSlideIndex[brd_side];
 	pce = LoopSlidePce[pceIndex++];
-	while( pce != 0) {			
+	while( pce !== 0) {			
 		for(pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
 			sq = brd_pList[PCEINDEX(pce,pceNum)];
 			for(index = 0; index < DirNum[pce]; ++index) {
 				dir = PceDir[pce][index];
 				t_sq = sq + dir;
-				while(SQOFFBOARD(t_sq)==BOOL.FALSE) {				
-					if(brd_pieces[t_sq] != PIECES.EMPTY) {
-						if( PieceCol[brd_pieces[t_sq]] == brd_side ^ 1) {
+				while(SQOFFBOARD(t_sq)===BOOL.FALSE) {				
+					if(brd_pieces[t_sq] !== PIECES.EMPTY) {
+						if( PieceCol[brd_pieces[t_sq]] === brd_side ^ 1) {
 							AddCaptureMove(MOVE(sq, t_sq, brd_pieces[t_sq], PIECES.EMPTY, 0));
 						}
 						break;
@@ -245,17 +245,17 @@ function GenerateCaptures() {
 	}
 	pceIndex = LoopNonSlideIndex[brd_side];
 	pce = LoopNonSlidePce[pceIndex++];
-	while( pce != 0) {	
+	while( pce !== 0) {	
 		for(pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
 			sq = brd_pList[PCEINDEX(pce,pceNum)];			
 			for(index = 0; index < DirNum[pce]; ++index) {
 				dir = PceDir[pce][index];
 				t_sq = sq + dir;
-				if(SQOFFBOARD(t_sq) == BOOL.TRUE) {				    
+				if(SQOFFBOARD(t_sq) === BOOL.TRUE) {				    
 					continue;
 				}				
-				if(brd_pieces[t_sq] != PIECES.EMPTY) {
-					if( PieceCol[brd_pieces[t_sq]] == brd_side ^ 1) {
+				if(brd_pieces[t_sq] !== PIECES.EMPTY) {
+					if( PieceCol[brd_pieces[t_sq]] === brd_side ^ 1) {
 						AddCaptureMove(MOVE(sq, t_sq, brd_pieces[t_sq], PIECES.EMPTY, 0));
 					}
 					continue;
