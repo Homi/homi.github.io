@@ -188,6 +188,14 @@ class ContentLoader {
         }
     }
 
+    // โหลดเนื้อหาทั้งหมด (portfolio และ blog) พร้อมกัน
+    async loadAllContent() {
+        await Promise.all([
+            this.loadPortfolio(),
+            this.loadBlogs()
+        ]);
+    }
+
     // แสดง fallback content เมื่อโหลดไม่ได้
     showFallbackContent() {
         const fallbackPortfolio = `
