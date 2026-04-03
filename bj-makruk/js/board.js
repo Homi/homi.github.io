@@ -162,7 +162,7 @@ function BookMove() {
 			if(move.length==4) {
 				var from = SqFromAlg(move.substr(0,2));
 				var to = SqFromAlg(move.substr(2,2));
-				varInternalMove = ParseMove(from,to);
+				var varInternalMove = ParseMove(from,to);
 				bookMoves.push(varInternalMove);
 			} 
 		}

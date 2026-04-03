@@ -7,8 +7,8 @@ function SqFromAlg(moveAlg) {
 	if(moveAlg[0] > 'h' || moveAlg[0] < 'a' ) return SQUARES.NO_SQ;
 	if(moveAlg[1] > '8' || moveAlg[1] < '1' ) return SQUARES.NO_SQ;
 	
-	file = moveAlg[0].charCodeAt() - 'a'.charCodeAt();
-	rank = moveAlg[1].charCodeAt() - '1'.charCodeAt();	
+	var file = moveAlg[0].charCodeAt() - 'a'.charCodeAt();
+	var rank = moveAlg[1].charCodeAt() - '1'.charCodeAt();
 	
 	return FR2SQ(file,rank);		
 }
@@ -53,7 +53,8 @@ function ParseMove(from, to) {
 	var Move = NOMOVE;
 	var PromPce = PIECES.EMPTY;
 	var found = BOOL.FALSE;
-	for(index = brd_moveListStart[brd_ply]; index < brd_moveListStart[brd_ply + 1]; ++index) {	
+	var index;
+	for(index = brd_moveListStart[brd_ply]; index < brd_moveListStart[brd_ply + 1]; ++index) {    
 		Move = brd_moveList[index];	
 		if(FROMSQ(Move)==from && TOSQ(Move)==to) {
 			PromPce = PROMOTED(Move);

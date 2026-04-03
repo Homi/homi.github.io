@@ -93,8 +93,8 @@ var KingKRK = [
 	-45,	-38,	-30,	-28,	-28,	-30,	-38,	-45,
 	-38,	-28,	-20,	-18,	-18,	-20,	-28,	-38,  
 	-30,	-22,	-15,	-10,	-10,	-15,	-22,	-30, 
-	-28,	-18,	-10,	 00,	 00,	-10,	-18,	-28,  
-	-28,	-18,	-10,	 00,	 00,	-10,	-18,	-28,  
+	-28,	-18,	-10,	  0,	  0,	-10,	-18,	-28,  
+	-28,	-18,	-10,	  0,	  0,	-10,	-18,	-28,  
 	-30,	-22,	-15,	-10,	-10,	-15,	-22,	-30,  
 	-38,	-28,	-20,	-18,	-18,	-20,	-28,	-38, 
 	-45,	-38,	-30,	-28,	-28,	-30,	-38,	-45
@@ -234,6 +234,7 @@ function MaterialDraw() {
 function PawnsInit() {
 
 	var index = 0;
+	var pce, pceNum, sq;
 	for(index = 0; index < 10; ++index) {	// Files: (0) 1 2 3 4 5 6 7 8 (9)			
 		PawnRanksWhite[index] = RANKS.RANK_8;			
 		PawnRanksBlack[index] = RANKS.RANK_1;
@@ -306,6 +307,7 @@ function pairOfPawn(pcePawn){
 
 function EvalEndgame(bscore, wkSq, bkSq){
 	var score = bscore;
+	var pce, pceNum, sq;
 	
 	// some known end-game
 	if(BlackMat == 0){
@@ -504,53 +506,53 @@ function BMedMob(sq) {
 }
 
 function EvalMobility(){
-	var pce, sq, pceNum, eval = 0;
+	var pce, sq, pceNum, e_eval = 0;
 	
 	pce = PIECES.wR;	
 	for(pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
 		sq = brd_pList[PCEINDEX(pce,pceNum)];
-		eval += RookMob(sq);
+		e_eval += RookMob(sq);
 	}
 	pce = PIECES.bR;	
 	for(pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
 		sq = brd_pList[PCEINDEX(pce,pceNum)];
-		eval -= RookMob(sq);
+		e_eval -= RookMob(sq);
 	}
 	
 	pce = PIECES.wC;	
 	for(pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
 		sq = brd_pList[PCEINDEX(pce,pceNum)];
-		eval += WConMob(sq);
+		e_eval += WConMob(sq);
 	}
 	pce = PIECES.bC;	
 	for(pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
 		sq = brd_pList[PCEINDEX(pce,pceNum)];
-		eval -= BConMob(sq);
+		e_eval -= BConMob(sq);
 	}
 	
 	pce = PIECES.wM;	
 	for(pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
 		sq = brd_pList[PCEINDEX(pce,pceNum)];
-		eval += WMedMob(sq);
+		e_eval += WMedMob(sq);
 	}
 	pce = PIECES.bM;	
 	for(pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
 		sq = brd_pList[PCEINDEX(pce,pceNum)];
-		eval -= BMedMob(sq);
+		e_eval -= BMedMob(sq);
 	}
 	
 	pce = PIECES.wN;	
 	for(pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
 		sq = brd_pList[PCEINDEX(pce,pceNum)];
-		eval += WKnightMob(sq);
+		e_eval += WKnightMob(sq);
 	}
 	pce = PIECES.bN;	
 	for(pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
 		sq = brd_pList[PCEINDEX(pce,pceNum)];
-		eval -= BKnightMob(sq);
+		e_eval -= BKnightMob(sq);
 	}
 	
-	return eval;
+	return e_eval;
 }
 
 function EvalAdvance(){

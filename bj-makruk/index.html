@@ -35,8 +35,8 @@
 		<br>
 		<div id = "OppSelect">
 			Your Opponent:<br>
-			<input type="radio" name="opponent" value="comp" checked="yes">Computer<br>
-			<input type="radio" name="opponent" value="human">Human<br>
+			<label><input type="radio" name="opponent" value="comp" checked>Computer</label><br>
+			<label><input type="radio" name="opponent" value="human">Human</label><br>
 		</div>
 		<div id="EngineOutput">
 			Thinking Time: <br>
@@ -60,7 +60,10 @@
 			<button type="button" id="AutoMove">Auto Move</button><br><br> 
 			<button type="button" id="TakeButton">Take Back</button><br><br>
 			<span id="GameStatus"></span><br><br>
-			<input type="checkbox" id="brdHC"><span id ="brdHCcheck">Request for Board Honour Counting<span><br>
+			<input type="checkbox" id="brdHC">
+			<label for="brdHC">
+				<span id="brdHCcheck">Request for Board Honour Counting</span>
+			</label><br>
 			<span id="BHVCountSpan"></span><br>
 			<span id="PHVCountSpan"></span><br>
 		</div>

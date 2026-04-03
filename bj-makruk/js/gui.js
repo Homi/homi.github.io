@@ -5,8 +5,8 @@ var computerPlay = BOOL.TRUE;
 var Show = BOOL.FALSE;
 
 var LastMove = {};
-LastMove.from = SQUARES.NO_SQ;
-LastMove.to = SQUARES.NO_SQ;
+LastMove.From = SQUARES.NO_SQ;
+LastMove.To = SQUARES.NO_SQ;
 
 var UserMove = {};
 UserMove.from = SQUARES.NO_SQ;
@@ -103,7 +103,7 @@ function check_honour_ruls(){
 					}
 				}
 				
-				if(BHV_flag == BOOL.TRUE) BHV_flag == BOOL.FALSE;
+				if(BHV_flag == BOOL.TRUE) BHV_flag = BOOL.FALSE;
 				if($("#brdHC").is(":checked") == true) $("#brdHC").prop("checked",false);
 				brd_BHV_count = 0;
 				
@@ -133,7 +133,6 @@ function check_honour_ruls(){
 				brd_HR_count = brd_BHV_count;
 			}
 		}
-		brd_HR_flag ^= brd_HR_flag;
 		brd_HR_flag = BHV_flag | PHV_flag;
 	}
 	
@@ -264,7 +263,7 @@ function CheckAndSet() {
 		// saveGame();
 		
 		computerPlay = BOOL.FALSE;
-		GameController.autoMove == BOOL.FALSE;
+		GameController.autoMove = BOOL.FALSE;
 		$("#AutoMove").text("Auto Move");
 		
 	}
@@ -635,7 +634,19 @@ $("#NewGameButton").click(function () {
 });
 
 $("input:radio[name=opponent]").click(function(){
-	Opponent = $(this).val();
+    Opponent = $(this).val();
+    
+    if(Opponent == "comp") {
+        computerPlay = BOOL.TRUE;
+        GameController.PlayerSide = brd_side^1;  // Player is opposite side
+        GameController.EngineSide = brd_side;    // Engine is current side
+    } else {
+        computerPlay = BOOL.FALSE;
+        GameController.PlayerSide = brd_side;    // Player is current side
+        GameController.EngineSide = brd_side^1;  // Opponent is opposite side
+    }
+    
+    console.log("Opponent changed to: " + Opponent + ", PlayerSide: " + GameController.PlayerSide);
 });
 
 var ranksChar_en = '12345678';
@@ -861,7 +872,7 @@ $(document).on('click','.PieceS', function (e) {
 	} 
 });
 
-var aString = "<div class=\"Stm\"><input type=\"radio\" name=\"STM\" value=\"w\" checked=\"yes\">White<br>";
+var aString = "<div class=\"Stm\"><input type=\"radio\" name=\"STM\" value=\"w\" checked=\"checked\">White<br>";
 	aString = aString +  "<input type=\"radio\" name=\"STM\" value=\"b\" >Black<br>";
 	aString = aString + "<button type=\"button\" id=\"ClearBoard\">Clear board</button><br><br>";
 	aString = aString + "</div>";

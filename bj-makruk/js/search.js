@@ -20,6 +20,7 @@ function PickNextMove(moveNum) {
 	var index = 0;
 	var bestScore = 0; 
 	var bestNum = moveNum;
+	var temp;
 	
 	for (index = moveNum; index < brd_moveListStart[brd_ply + 1]; ++index) {
 		if (brd_moveScores[index] > bestScore) {
@@ -50,6 +51,7 @@ function IsRepetition() {
 
 function ClearPvTable() {
 	
+	var index;
 	for(index = 0; index < PVENTRIES; index++) {
 			brd_PvTable[index].move = NOMOVE;
 			brd_PvTable[index].posKey = 0;

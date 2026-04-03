@@ -1,18 +1,23 @@
-# Bj-Makruk
+# Homi
 
-**โปรแกรม bj-makruk** สามารถเล่นออนไลน์ได้ตามลิงก์ : [https://homi.github.io/](https://homi.github.io/bj-makruk/index.html)
+ยินดีต้อนรับสู่ Homi — พอร์ตโฟลิโอโฮมเพจส่วนตัวที่รวบรวมโปรเจกต์และผลงานแรกของผมไว้ในที่เดียว
 
-**โปรแกรม  bj-makruk**  สร้างตามคลิปสอนในยูทูปชื่อ [A tutorial series programming a chess engine in Javascript](https://youtu.be/2eA0bD3wV3Q) โดย **Bluefever Software**
+## ผลงานแรก: bj-makruk
 
-ผมเขียนโปรแกรมนี้ตั้งแต่ปี 2014 แล้วก็ไม่ได้ทำอะไรอีก ผมนำมาเผยแพร่โดยไม่ได้ปรับปรุงอะไรอีกเพื่อประโยชน์ทางการศึกษาของเพื่อน ใครอยากนำไปพัฒนาต่อก็ทำได้โดยสะดวกครับ
+- ชื่อโปรเจกต์: **bj-makruk**
+- ประเภท: เกมส์หมากรุกไทย (Makruk) ที่ทำงานบนเว็บ
+- ลิงก์ทดลองเล่น: https://homi.github.io/bj-makruk/index.html
 
-*แปลโดย google translate*
+## เกี่ยวกับ
 
+Homi เป็นเว็บไซต์สำหรับแสดงตัวอย่างโปรเจกต์ JavaScript และงานพัฒนาเว็บอื่นๆ โดยเริ่มจาก bj-makruk เป็นผลงานแรกที่ผมพัฒนาขึ้นและนำเสนอเป็นตัวอย่างสไตล์การเขียนโค้ดและการออกแบบ UI/UX เบื้องต้น
 
-**The bj-makruk program** can be played online, follow the link: [https://Homi.github.io/](https://Homi.github.io/)
+## ปรับปรุงและพัฒนา
 
-**The bj-makruk program** is based on a YouTube tutorial called [A tutorial series programming a chess engine in Javascript](https://youtu.be/2eA0bD3wV3Q) by **Bluefever Software**.
+- ยินดีรับคำแนะนำและการร่วมพัฒนา
+- เปิดให้ใช้งานเชิงการศึกษาและเป็นต้นแบบให้คนอื่นนำไปต่อยอด
 
-I've been writing this program since 2014 and haven't done anything else. I published it without updating it for the benefit of my friends' education. Anyone who wants to develop further, can do it conveniently.
+---
 
-*Translated by google translate*
+สามารถดูโปรเจกต์อื่นๆ ได้ในโฟลเดอร์ `portfolio/` และบทความเพิ่มเติมใน `blogs/`
+

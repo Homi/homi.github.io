@@ -101,7 +101,8 @@ function GenerateMoves() {
 	var pceIndex;
 	var pce;
 	var sq;
-	var tsq;
+	var t_sq;
+	var dir;
 	var index;
 	brd_moveListStart[brd_ply + 1] = brd_moveListStart[brd_ply];
 	if(brd_side == COLOURS.WHITE) {
@@ -193,7 +194,8 @@ function GenerateCaptures() {
 	var pceIndex;
 	var pce;
 	var sq;
-	var tsq;
+	var t_sq;
+	var dir;
 	var index;
 	brd_moveListStart[brd_ply + 1] = brd_moveListStart[brd_ply];
 	if(brd_side == COLOURS.WHITE) {
