@@ -119,7 +119,7 @@ class ContentLoader {
                     <p>${item.description}</p>
                 </div>
                 <div class="portfolio-card-body">
-                    <p>${item.htmlContent.split('\n')[0] || 'รายละเอียดโครงการ'}</p>
+                    ${item.htmlContent.split('\n')[0] || '<p>รายละเอียดโครงการ</p>'}
                     <div class="tech-stack">
                         ${techStack}
                     </div>
