@@ -2,6 +2,18 @@
 
 ยินดีต้อนรับสู่ Homi — พอร์ตโฟลิโอโฮมเพจส่วนตัวที่รวบรวมโปรเจกต์และผลงานแรกของผมไว้ในที่เดียว
 
+## การเพิ่มเนื้อหาใหม่
+
+- เพิ่มไฟล์ Markdown ใหม่ไว้ในโฟลเดอร์ `portfolio/` หรือ `blogs/`
+- ไม่ต้องแก้ `content-loader.js`
+- ไม่ต้องแก้ `index.json` เอง เพราะ GitHub Actions จะ generate `portfolio/index.json` และ `blogs/index.json` ให้อัตโนมัติหลัง push ขึ้น `main`
+
+## การ generate ดัชนีเนื้อหา
+
+- สคริปต์อยู่ที่ `scripts/generate-content-index.js`
+- workflow อยู่ที่ `.github/workflows/generate-content-index.yml`
+- หากต้องการทดสอบในเครื่อง สามารถรัน `node scripts/generate-content-index.js`
+
 ## ผลงานแรก: bj-makruk
 
 - ชื่อโปรเจกต์: **bj-makruk**

@@ -74,6 +74,34 @@ class ContentLoader {
         });
     }
 
+    async loadContentIndex(folder) {
+        const indexPath = `./${folder}/index.json`;
+        const indexContent = await this.loadMarkdownFile(indexPath);
+
+        if (!indexContent) {
+            console.warn(`Content index not found: ${indexPath}`);
+            return [];
+        }
+
+        try {
+            const parsedIndex = JSON.parse(indexContent);
+
+            if (Array.isArray(parsedIndex)) {
+                return parsedIndex;
+            }
+
+            if (Array.isArray(parsedIndex.files)) {
+                return parsedIndex.files;
+            }
+
+            console.warn(`Invalid content index format: ${indexPath}`);
+            return [];
+        } catch (error) {
+            console.warn(`Invalid JSON in content index: ${indexPath}`, error);
+            return [];
+        }
+    }
+
     // โหลดไฟล์ทั้งหมดในโฟลเดอร์
     async loadContentFromFolder(folder, fileList) {
         const contentPromises = fileList.map(async (fileName) => {
@@ -158,7 +186,7 @@ class ContentLoader {
     // แสดง portfolio
     async loadPortfolio() {
         try {
-            const portfolioFiles = ['bj-makruk.md', 'project2.md', 'project3.md'];
+            const portfolioFiles = await this.loadContentIndex('portfolio');
             const portfolioItems = await this.loadContentFromFolder('portfolio', portfolioFiles);
             const sortedItems = this.sortByDate(portfolioItems);
 
@@ -177,7 +205,7 @@ class ContentLoader {
     // แสดง blog
     async loadBlogs() {
         try {
-            const blogFiles = ['javascript-makruk-game.md', 'javascript-performance-tips.md', 'makruk-ai-minimax.md'];
+            const blogFiles = await this.loadContentIndex('blogs');
             const blogItems = await this.loadContentFromFolder('blogs', blogFiles);
             const sortedItems = this.sortByDate(blogItems);
 

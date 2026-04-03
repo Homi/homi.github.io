@@ -1,0 +1,46 @@
+name: Generate Content Index
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'blogs/**/*.md'
+      - 'portfolio/**/*.md'
+      - 'scripts/generate-content-index.js'
+      - '.github/workflows/generate-content-index.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate-index:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generate content indexes
+        run: node scripts/generate-content-index.js
+
+      - name: Commit updated indexes
+        run: |
+          if git diff --quiet -- blogs/index.json portfolio/index.json; then
+            echo "No index changes to commit"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add blogs/index.json portfolio/index.json
+          git commit -m "chore: update generated content indexes"
+          git push
