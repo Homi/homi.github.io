@@ -12,7 +12,8 @@
 
 - สคริปต์อยู่ที่ `scripts/generate-content-index.js`
 - workflow อยู่ที่ `.github/workflows/generate-content-index.yml`
-- หากต้องการทดสอบในเครื่อง สามารถรัน `node scripts/generate-content-index.js`
+- หากต้องการ generate ครั้งเดียวในเครื่อง สามารถรัน `npm run generate:index`
+- หากต้องการให้ index อัปเดตอัตโนมัติระหว่างเพิ่มหรือลบไฟล์ `.md` ในเครื่อง สามารถรัน `npm run generate:index:watch`
 
 ## ผลงานแรก: bj-makruk
 

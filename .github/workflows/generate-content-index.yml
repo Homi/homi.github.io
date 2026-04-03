@@ -1,5 +1,9 @@
 name: Generate Content Index
 
+concurrency:
+  group: generate-content-index-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     branches:
@@ -7,6 +11,7 @@ on:
     paths:
       - 'blogs/**/*.md'
       - 'portfolio/**/*.md'
+      - 'package.json'
       - 'scripts/generate-content-index.js'
       - '.github/workflows/generate-content-index.yml'
   workflow_dispatch:
@@ -30,7 +35,7 @@ jobs:
           node-version: '20'
 
       - name: Generate content indexes
-        run: node scripts/generate-content-index.js
+        run: npm run generate:index
 
       - name: Commit updated indexes
         run: |

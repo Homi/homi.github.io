@@ -1,0 +1,8 @@
+{
+  "name": "homi-github-io",
+  "private": true,
+  "scripts": {
+    "generate:index": "node scripts/generate-content-index.js",
+    "generate:index:watch": "node scripts/generate-content-index.js --watch"
+  }
+}
