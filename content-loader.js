@@ -6,13 +6,18 @@ class ContentLoader {
         this.blogContainer = document.querySelector('#blog .blog-list');
     }
 
+    normalizeMarkdownContent(content) {
+        return content.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
+    }
+
     // แยก frontmatter จากเนื้อหา Markdown
     parseFrontmatter(content) {
-        const frontmatterRegex = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/;
-        const match = content.match(frontmatterRegex);
+        const normalizedContent = this.normalizeMarkdownContent(content);
+        const frontmatterRegex = /^---\n([\s\S]*?)\n---\n?([\s\S]*)$/;
+        const match = normalizedContent.match(frontmatterRegex);
 
         if (!match) {
-            return { frontmatter: {}, content: content };
+            return { frontmatter: {}, content: normalizedContent };
         }
 
         const frontmatterStr = match[1];
@@ -72,7 +77,7 @@ class ContentLoader {
     // โหลดไฟล์ทั้งหมดในโฟลเดอร์
     async loadContentFromFolder(folder, fileList) {
         const contentPromises = fileList.map(async (fileName) => {
-            const filePath = `${folder}/${fileName}`;
+            const filePath = `./${folder}/${fileName}`;
             const content = await this.loadMarkdownFile(filePath);
 
             if (content) {
@@ -186,6 +191,14 @@ class ContentLoader {
             console.error('Error loading blogs:', error);
             this.blogContainer.innerHTML = '<p class="loading-error">เกิดข้อผิดพลาดในการโหลดบล็อก</p>';
         }
+    }
+
+    // โหลดเนื้อหาทั้งหมด (portfolio และ blog) พร้อมกัน
+    async loadAllContent() {
+        await Promise.all([
+            this.loadPortfolio(),
+            this.loadBlogs()
+        ]);
     }
 
     // แสดง fallback content เมื่อโหลดไม่ได้
