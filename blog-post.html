@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>บทความ - Homi</title>
+    <meta name="description" content="อ่านบทความฉบับเต็มจากบล็อกของ Homi เกี่ยวกับการพัฒนาซอฟต์แวร์และเกมบนเว็บ">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="article-page">
+    <nav>
+        <ul>
+            <li><a href="./index.html#intro">บ้าน</a></li>
+            <li><a href="./index.html#portfolio">ผลงาน</a></li>
+            <li><a href="./index.html#blog">บล็อก</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section class="article-hero">
+            <div class="container article-hero-inner">
+                <a href="./index.html#blog" class="back-link">← กลับไปหน้าหลัก</a>
+                <p class="article-kicker">บทความจากบล็อก</p>
+                <h1 id="article-title">กำลังโหลดบทความ...</h1>
+                <p id="article-description" class="article-description">กำลังเตรียมเนื้อหาแบบเต็มของบทความนี้</p>
+                <div id="article-meta" class="article-meta"></div>
+                <div id="article-tags" class="article-tags"></div>
+            </div>
+        </section>
+
+        <section class="article-section">
+            <div class="container">
+                <article id="article-content" class="article-card article-content">
+                    <p class="loading-error">กำลังโหลดเนื้อหา...</p>
+                </article>
+
+                <div class="article-actions">
+                    <a href="./index.html#blog" class="cta-button">กลับไปหน้าบล็อก</a>
+                    <a href="./index.html#intro" class="text-link">กลับหน้าแรก</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2026 Homi. สงวนลิขสิทธิ์ทั้งหมด</p>
+            <p>
+                ติดต่อ:
+                <a href="https://github.com/Homi">GitHub</a> |
+                <a href="mailto:bhome1@hotmail.com">Email</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="blog-post.js"></script>
+</body>
+</html>

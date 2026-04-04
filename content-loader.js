@@ -169,6 +169,7 @@ class ContentLoader {
             month: 'long',
             day: 'numeric'
         });
+        const postUrl = `./blog-post.html?post=${encodeURIComponent(item.fileName)}`;
 
         return `
             <div class="blog-card">
@@ -177,7 +178,7 @@ class ContentLoader {
                     <p class="blog-date">${dateStr}</p>
                     <h3>${item.title}</h3>
                     <p>${item.description}</p>
-                    <a href="#" class="read-more" onclick="showBlogContent('${item.fileName}')">อ่านเพิ่มเติม →</a>
+                    <a href="${postUrl}" class="read-more">อ่านเพิ่มเติม →</a>
                 </div>
             </div>
         `;
@@ -284,7 +285,7 @@ class ContentLoader {
                     <p class="blog-date">15 มีนาคม 2026</p>
                     <h3>การเขียนเกมหมากรุกด้วย JavaScript</h3>
                     <p>เรียนรู้วิธีการสร้างเอนจิ่นหมากรุกที่สามารถคิดเลยกลยุทธ์ได้ด้วย JavaScript</p>
-                    <a href="#" class="read-more">อ่านเพิ่มเติม →</a>
+                    <a href="./blog-post.html?post=javascript-makruk-game.md" class="read-more">อ่านเพิ่มเติม →</a>
                 </div>
             </div>
             <div class="blog-card">
@@ -293,7 +294,7 @@ class ContentLoader {
                     <p class="blog-date">10 มีนาคม 2026</p>
                     <h3>เคล็ดลับการเพิ่มประสิทธิภาพของโค้ด</h3>
                     <p>แนวทางปฏิบัติที่ดีที่สุดสำหรับการเขียนโค้ด JavaScript ที่มีประสิทธิภาพสูง</p>
-                    <a href="#" class="read-more">อ่านเพิ่มเติม →</a>
+                    <a href="./blog-post.html?post=javascript-performance-tips.md" class="read-more">อ่านเพิ่มเติม →</a>
                 </div>
             </div>
             <div class="blog-card">
@@ -302,7 +303,7 @@ class ContentLoader {
                     <p class="blog-date">5 มีนาคม 2026</p>
                     <h3>เล่นเกมหมากรุกกับ AI</h3>
                     <p>วิธีการมินแม็กซ์ (Minimax) และสิ่งที่ต้องรู้เกี่ยวกับการสร้าง AI สำหรับเกม</p>
-                    <a href="#" class="read-more">อ่านเพิ่มเติม →</a>
+                    <a href="./blog-post.html?post=makruk-ai-minimax.md" class="read-more">อ่านเพิ่มเติม →</a>
                 </div>
             </div>
         `;
@@ -310,12 +311,6 @@ class ContentLoader {
         this.portfolioContainer.innerHTML = fallbackPortfolio;
         this.blogContainer.innerHTML = fallbackBlog;
     }
-}
-
-// ฟังก์ชันสำหรับแสดงเนื้อหาบล็อกแบบเต็ม (สำหรับอนาคต)
-function showBlogContent(fileName) {
-    // TODO: เปิด modal หรือหน้าใหม่แสดงเนื้อหาบล็อกเต็ม
-    console.log('แสดงเนื้อหาบล็อก:', fileName);
 }
 
 // เริ่มโหลดเนื้อหาเมื่อหน้าเว็บโหลดเสร็จ
