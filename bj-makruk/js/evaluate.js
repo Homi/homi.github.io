@@ -192,6 +192,28 @@ var MedLight = [
 var BlackMat = 0;
 var WhiteMat = 0;
 
+function UpdateMaterialSignature() {
+	WhiteMat = 0;
+	WhiteMat |= brd_pceNum[PIECES.wP] & 3;
+	WhiteMat |= ((brd_pceNum[PIECES.wM] & 3) << 2);
+	WhiteMat |= ((brd_pceNum[PIECES.wN] & 3) << 4);
+	WhiteMat |= ((brd_pceNum[PIECES.wC] & 1) << 6);
+	WhiteMat |= ((brd_pceNum[PIECES.wR] & 1) << 7);
+	if(brd_pceNum[PIECES.wP] > 3 || brd_pceNum[PIECES.wM] > 3 || brd_pceNum[PIECES.wN] == 2 || brd_pceNum[PIECES.wC] == 2 || brd_pceNum[PIECES.wR] > 0) {
+		WhiteMat = 0xFF;
+	}
+
+	BlackMat = 0;
+	BlackMat |= brd_pceNum[PIECES.bP] & 3;
+	BlackMat |= ((brd_pceNum[PIECES.bM] & 3) << 2);
+	BlackMat |= ((brd_pceNum[PIECES.bN] & 3) << 4);
+	BlackMat |= ((brd_pceNum[PIECES.bC] & 1) << 6);
+	BlackMat |= ((brd_pceNum[PIECES.bR] & 1) << 7);
+	if(brd_pceNum[PIECES.bP] > 3 || brd_pceNum[PIECES.bM] > 3 || brd_pceNum[PIECES.bN] == 2 || brd_pceNum[PIECES.bC] == 2 || brd_pceNum[PIECES.bR] > 0) {
+		BlackMat = 0xFF;
+	}
+}
+
 var ENDGAME_MAT = 1 * PieceVal[PIECES.wR] + 2 * PieceVal[PIECES.wN] + 2 * PieceVal[PIECES.wP] + PieceVal[PIECES.wK];
 
 function MaterialDraw() {
@@ -573,6 +595,8 @@ function EvalPosition() {
 	var pceNum;
 	var sq, wkSq, bkSq;
 	var score = brd_material[COLOURS.WHITE] - brd_material[COLOURS.BLACK];
+
+	UpdateMaterialSignature();
 	var file;
 	var rank;
 	

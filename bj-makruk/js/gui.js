@@ -8,9 +8,32 @@ var LastMove = {};
 LastMove.From = SQUARES.NO_SQ;
 LastMove.To = SQUARES.NO_SQ;
 
+function ResetLastMove() {
+	LastMove.From = SQUARES.NO_SQ;
+	LastMove.To = SQUARES.NO_SQ;
+}
+
+function RestorePreviousLastMove() {
+	ResetLastMove();
+	if(brd_hisPly > 0) {
+		var lastMove = brd_history[brd_hisPly - 1].move;
+		if(lastMove != NOMOVE) {
+			LastMove.From = FROMSQ(lastMove);
+			LastMove.To = TOSQ(lastMove);
+		}
+	}
+}
+
 var UserMove = {};
 UserMove.from = SQUARES.NO_SQ;
 UserMove.to = SQUARES.NO_SQ;
+
+function ResetUserMove() {
+	UserMove.from = SQUARES.NO_SQ;
+	UserMove.to = SQUARES.NO_SQ;
+}
+
+var searchDelayHandle = null;
 
 var MirrorFiles = [ FILES.FILE_H, FILES.FILE_G, FILES.FILE_F, FILES.FILE_E, FILES.FILE_D, FILES.FILE_C, FILES.FILE_B, FILES.FILE_A ];
 var MirrorRanks = [ RANKS.RANK_8, RANKS.RANK_7, RANKS.RANK_6, RANKS.RANK_5, RANKS.RANK_4, RANKS.RANK_3, RANKS.RANK_2, RANKS.RANK_1 ];
@@ -19,6 +42,10 @@ function MIRROR120(sq) {
 	var file = MirrorFiles[FilesBrd[sq]];
 	var rank = MirrorRanks[RanksBrd[sq]];
 	return FR2SQ(file,rank);
+}
+
+function GetBoardSquareSize() {
+	return $("#Board").width() / 8;
 }
 
 $("#SetFen").click(function () {
@@ -41,6 +68,8 @@ $("#SetFen").click(function () {
 	$('#SetBoard').show();
 	$('#SetPiece').hide();
 	setupBoard = BOOL.FALSE;
+	ResetLastMove();
+	ResetUserMove();
 	
 	SetInitialBoardPieces();	
 	GameController.PlayerSide = brd_side;	
@@ -141,23 +170,23 @@ function check_honour_ruls(){
 function CheckResult() {
 
 	if (ThreeFoldRep() >= 2) {
-     $("#GameStatus").text("GAME DRAWN {3-fold repetition}"); 
+     $("#GameStatus").text("เกมเสมอ {เดินซ้ำ 3 ครั้ง}"); 
      return BOOL.TRUE;
     }
 	
 	if (DrawMaterial() == BOOL.TRUE) {
-     $("#GameStatus").text("GAME DRAWN {insufficient material to mate}"); 
+     $("#GameStatus").text("เกมเสมอ {กำลังหมากไม่พอรุกจน}"); 
      return BOOL.TRUE;
     }
 
 	check_honour_ruls();
 
 	if (brd_BHV_count > brd_BHV_value) {
-     $("#GameStatus").text("GAME DRAWN {board's honour rule}"); 
+     $("#GameStatus").text("เกมเสมอ {ครบศักดิ์กระดาน}"); 
      return BOOL.TRUE;
     }
 	if (brd_PHV_count > brd_PHV_value) {
-     $("#GameStatus").text("GAME DRAWN {piece's honour rule}"); 
+     $("#GameStatus").text("เกมเสมอ {ครบศักดิ์หมาก}"); 
      return BOOL.TRUE;
     }
    
@@ -178,10 +207,10 @@ function CheckResult() {
     //$("#currentFenSpan").text(BoardToFen()); 
 
 	if($("#brdHC").is(":checked"))
-		$("#BHVCountSpan").text("BoardHonourCount: " + brd_BHV_count + "/64 "); 
+		$("#BHVCountSpan").text("นับศักดิ์กระดาน: " + brd_BHV_count + "/64 "); 
 	else $("#BHVCountSpan").text(""); 
 	if(PHV_flag == BOOL.TRUE)
-		$("#PHVCountSpan").text("PieceHonourCount: " + brd_PHV_count + "/" + brd_PHV_value);
+		$("#PHVCountSpan").text("นับศักดิ์หมาก: " + brd_PHV_count + "/" + brd_PHV_value);
 	else $("#PHVCountSpan").text(""); 
 	
 	if(found != 0) return BOOL.FALSE;
@@ -191,12 +220,12 @@ function CheckResult() {
 	
 	if(InCheck == BOOL.TRUE)	{
 	    if(brd_side == COLOURS.WHITE) {
-	      $("#GameStatus").text("GAME OVER {black mates}");return BOOL.TRUE;
+	      $("#GameStatus").text("เกมจบ {ดำรุกจน}");return BOOL.TRUE;
         } else {
-	      $("#GameStatus").text("GAME OVER {white mates}");return BOOL.TRUE;
+	      $("#GameStatus").text("เกมจบ {ขาวรุกจน}");return BOOL.TRUE;
         }
     } else {
-      $("#GameStatus").text("GAME DRAWN {stalemate}");return BOOL.TRUE;
+      $("#GameStatus").text("เกมเสมอ {อับจน}");return BOOL.TRUE;
     }	
     console.log('Returning False');
 	return BOOL.FALSE;	
@@ -204,16 +233,22 @@ function CheckResult() {
 
 function ClickedSquare(pageX, pageY) {
 
-	var position = $("#Board").position();
-	console.log("Piece clicked at " + pageX + "," + pageY + " board top:" + position.top + " board left:" + position.left);
+	var boardOffset = $("#Board").offset();
+	if(!boardOffset) return SQUARES.NO_SQ;
+	console.log("Piece clicked at " + pageX + "," + pageY + " board top:" + boardOffset.top + " board left:" + boardOffset.left);
 	
-	var workedX = Math.floor(position.left);
-	var workedY = Math.floor(position.top);
-	var pageX = Math.floor(pageX);
-	var pageY = Math.floor(pageY);
+	var workedX = Math.floor(boardOffset.left);
+	var workedY = Math.floor(boardOffset.top);
+	pageX = Math.floor(pageX);
+	pageY = Math.floor(pageY);
 	
-	var file = Math.floor((pageX-workedX) / 60);
-	var rank = 7 - Math.floor((pageY-workedY) / 60);
+	var squareSize = GetBoardSquareSize() || 60;
+	var file = Math.floor((pageX-workedX) / squareSize);
+	var rank = 7 - Math.floor((pageY-workedY) / squareSize);
+	
+	if(file < FILES.FILE_A || file > FILES.FILE_H || rank < RANKS.RANK_1 || rank > RANKS.RANK_8) {
+		return SQUARES.NO_SQ;
+	}
 	
 	var sq = FR2SQ(file,rank);
 	
@@ -229,26 +264,14 @@ function ClickedSquare(pageX, pageY) {
 	return sq;
 }
 
+function SyncFenDisplay() {
+	var currentFen = BoardToFen();
+	$("#currentFenSpan").text(currentFen);
+	$('#fenIn').val(currentFen);
+}
+
 function updateMove(){
-	//Endgame material
-	WhiteMat = 0;
-	WhiteMat |= brd_pceNum[PIECES.wP]&3;
-	WhiteMat |= ((brd_pceNum[PIECES.wM]&3)<<2);
-	WhiteMat |= ((brd_pceNum[PIECES.wN]&3)<<4);
-	WhiteMat |= ((brd_pceNum[PIECES.wC]&1)<<6);
-	WhiteMat |= ((brd_pceNum[PIECES.wR]&1)<<7);
-	if( brd_pceNum[PIECES.wP] > 3 || brd_pceNum[PIECES.wM] > 3 || brd_pceNum[PIECES.wN] == 2 || brd_pceNum[PIECES.wC] == 2 || brd_pceNum[PIECES.wR] > 0 ){
-		WhiteMat = 0xFF;
-	}
-	BlackMat = 0;
-	BlackMat |= brd_pceNum[PIECES.bP]&3;
-	BlackMat |= ((brd_pceNum[PIECES.bM]&3)<<2);
-	BlackMat |= ((brd_pceNum[PIECES.bN]&3)<<4);
-	BlackMat |= ((brd_pceNum[PIECES.bC]&1)<<6);
-	BlackMat |= ((brd_pceNum[PIECES.bR]&1)<<7);
-	if( brd_pceNum[PIECES.bP] > 3 || brd_pceNum[PIECES.bM] > 3 || brd_pceNum[PIECES.bN] == 2 || brd_pceNum[PIECES.bC] == 2 || brd_pceNum[PIECES.bR] > 0 ){
-		BlackMat = 0xFF;
-	}
+	UpdateMaterialSignature();
 }
 
 function CheckAndSet() {
@@ -264,11 +287,11 @@ function CheckAndSet() {
 		
 		computerPlay = BOOL.FALSE;
 		GameController.autoMove = BOOL.FALSE;
-		$("#AutoMove").text("Auto Move");
+		$("#AutoMove").text("เดินอัตโนมัติ");
 		
 	}
 	updateMove();
-	$("#currentFenSpan").text(BoardToFen());
+	SyncFenDisplay();
 	if(Show == BOOL.TRUE) $("#moveHistory").text(" " + printGameLine());
 	
 	if(GameController.autoMove == BOOL.TRUE) 
@@ -279,21 +302,19 @@ $("#showHist").click(function(e){
 
 	if(Show == BOOL.TRUE){
 		Show = BOOL.FALSE;
-		$("#showHist").text("Show history");
+		$("#showHist").text("แสดงประวัติ");
 		$("#moveHistory").text(" ");
-		$('#TCViewer').hide()
 		$('#WBPGN').hide()
 	} else {
 		Show = BOOL.TRUE;
-		$("#showHist").text("Hide history");
+		$("#showHist").text("ซ่อนประวัติ");
 		$("#moveHistory").text(" " + printGameLine());
-		$('#TCViewer').show()
 		$('#WBPGN').show()
 	}
 });
 
 function toCopy(text) {
-    window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
+    window.prompt("คัดลอกข้อความ: กด Ctrl+C แล้วกด Enter", text);
 }
 
 $('#currentFenSpan').click(function() {
@@ -304,55 +325,8 @@ $('#moveHistory').click(function() {
     toCopy($('#moveHistory').text())
 });
 
-$('#TCViewer').click(function() {
-	var fenStr = $("#fenIn").val();	
-	fenStr = fenStr.split(' ');
-    var txt = fenStr[0].split('/');
-    var i, s = '';
-    for(i=7;i>=0;i--){
-		txt[i]=txt[i].replace(/k/g,'S');
-		txt[i]=txt[i].replace(/n/g,'L');
-		txt[i]=txt[i].replace(/r/g,'I');
-		txt[i]=txt[i].replace(/p/g,'D');
-		txt[i]=txt[i].replace(/K/g,'k');
-		txt[i]=txt[i].replace(/N/g,'n');
-		txt[i]=txt[i].replace(/R/g,'r');
-		txt[i]=txt[i].replace(/P/g,'p');
-		txt[i]=txt[i].replace(/S/g,'K');
-		txt[i]=txt[i].replace(/L/g,'N');
-		txt[i]=txt[i].replace(/I/g,'R');
-		txt[i]=txt[i].replace(/D/g,'P');
-        txt[i]=txt[i].replace(/m/g,'Q');
-        txt[i]=txt[i].replace(/M/g,'q');
-        txt[i]=txt[i].replace(/c/g,'B');
-        txt[i]=txt[i].replace(/C/g,'b');
-        txt[i]=txt[i].replace(/1/g,'e');
-        txt[i]=txt[i].replace(/2/g,'ee');
-        txt[i]=txt[i].replace(/3/g,'eee');
-        txt[i]=txt[i].replace(/4/,'eeee');
-        txt[i]=txt[i].replace(/5/,'eeeee');
-        txt[i]=txt[i].replace(/6/,'eeeeee');
-        txt[i]=txt[i].replace(/7/,'eeeeeee');
-        txt[i]=txt[i].replace(/8/,'eeeeeeee');
-        s = s + txt[i];
-    }
-    var url = 'http://www.thaibg.com/TChess/viewgame.php?Tournament=BJ+Makruk+online&Place=&Time=&RoundNo=&BoardNo=&White=&Black=&Result=&StartPos='
-	url = url + s;
-	url = url + '&MoveList=';
-	url = url + $('#moveHistory').text().replace(/\s|m/g, '');
-	url = url + '&View=++++++View++++++';
-	var win = window.open(url, '_blank');
-	if(win){
-		//Browser has allowed it to be opened
-		win.focus();
-	}else{
-		//Browser has blocked it
-		alert('Please allow popups for this site');
-	}
-});
-
 $('#WBPGN').click(function() {
-	var fenStr = $("#fenIn").val();	
+	var fenStr = BoardToFen();	
 	fenStr = fenStr.replace(/c/g, 's');
 	fenStr = fenStr.replace(/C/g, 'S');
 	var txt = '[Event "BJ Makruk online"]\n';
@@ -363,15 +337,22 @@ $('#WBPGN').click(function() {
 	toCopy(txt);
 });
 
-$('#TCViewer').hide();
 $('#WBPGN').hide();
 
 function PreSearch() {
 
-	if(GameController.GameOver != BOOL.TRUE) {				
+	if(GameController.GameOver != BOOL.TRUE && srch_thinking != BOOL.TRUE) {				
+		srch_stop = BOOL.FALSE;
 		srch_thinking = BOOL.TRUE;
-		$('#ThinkingImageDiv').append('<image src="images/think4.png" id="ThinkingPng"/>')
-		setTimeout( function() {StartSearch(); }, 200);
+		$('#ThinkingPng').remove();
+		if(searchDelayHandle !== null) {
+			clearTimeout(searchDelayHandle);
+		}
+		$('#ThinkingImageDiv').show().append('<img src="images/think4.png" id="ThinkingPng" alt="คอมพิวเตอร์กำลังคิด"/>');
+		searchDelayHandle = setTimeout(function() {
+			searchDelayHandle = null;
+			StartSearch();
+		}, 200);
 	}
 }
 
@@ -452,21 +433,23 @@ $(document).on('click','.Square', function (e) {
 
 function RemoveGUIPiece(sq) {
 
-	$( ".Piece" ).each(function( index ) {
-		 if( (RanksBrd[sq] == 7 - Math.round($(this).position().top/60)) && (FilesBrd[sq] == Math.round($(this).position().left/60)) ){		
-			$(this).remove();			
-		 }
-		});
+	if(GameController.BoardFlipped == BOOL.TRUE) {
+		sq = MIRROR120(sq);
+	}
+	$(".Piece[data-sq='" + sq + "']").remove();
 }
 
 function AddGUIPiece(sq,pce) {	
 
+	if(GameController.BoardFlipped == BOOL.TRUE) {
+		sq = MIRROR120(sq);
+	}
 	var rank = RanksBrd[sq];
 	var file = FilesBrd[sq];
 	var rankName = "rank" + (rank + 1);	
 	var fileName = "file" + (file + 1);	
 	pieceFileName = "images/" + SideChar[PieceCol[pce]] + PceChar[pce].toUpperCase() + ".png";
-	imageString = "<image src=\"" + pieceFileName + "\" class=\"Piece clickElement " + rankName + " " + fileName + "\"/>";
+	imageString = "<img src=\"" + pieceFileName + "\" alt=\"\" data-sq=\"" + sq + "\" class=\"Piece clickElement " + rankName + " " + fileName + "\"/>";
 	$("#Board").append(imageString);
 }
 
@@ -487,27 +470,26 @@ function MoveGUIPiece(move) {
 	DeselectSq(LastMove.To);
 	
 	if(CAPTURED(move)) {
-		RemoveGUIPiece(flippedTo);
+		RemoveGUIPiece(to);
 	}
 	
 	var rank = RanksBrd[flippedTo];
 	var file = FilesBrd[flippedTo];
 	var rankName = "rank" + (rank + 1);	
 	var fileName = "file" + (file + 1);
-	
-	$( ".Piece" ).each(function( index ) {
-	 if( (RanksBrd[flippedFrom] == 7 - Math.round($(this).position().top/60)) && (FilesBrd[flippedFrom] == Math.round($(this).position().left/60)) ){
-     	$(this).removeClass();
-     	$(this).addClass("Piece clickElement " + rankName + " " + fileName);     
-     }
-    });
+	var $piece = $(".Piece[data-sq='" + flippedFrom + "']").first();
+	if($piece.length) {
+		$piece.removeClass();
+		$piece.addClass("Piece clickElement " + rankName + " " + fileName);
+		$piece.attr('data-sq', flippedTo);
+	}
 
     var prom = PROMOTED(move);
     console.log("PromPce:" + prom);
     if(prom != PIECES.EMPTY) {
 		console.log("prom removing from " + PrSq(flippedTo));
-    	RemoveGUIPiece(flippedTo);
-    	AddGUIPiece(flippedTo,prom);
+    	RemoveGUIPiece(to);
+    	AddGUIPiece(to,prom);
     }
 	
 	LastMove.From = from;
@@ -520,27 +502,13 @@ function MoveGUIPiece(move) {
 }
 
 function DeselectSq(sq) {
-
-	if(GameController.BoardFlipped == BOOL.TRUE) {
-		sq = MIRROR120(sq);
-	}
-	$( ".Square" ).each(function( index ) {     
-	 if( (RanksBrd[sq] == 7 - Math.round($(this).position().top/60)) && (FilesBrd[sq] == Math.round($(this).position().left/60)) ){     	
-     	$(this).removeClass('SqSelected');    
-     }
-    });
+	if(sq == SQUARES.NO_SQ) return;
+	$(".Square[data-sq='" + sq + "']").removeClass('SqSelected');
 }
 
 function SetSqSelected(sq) {
-
-	if(GameController.BoardFlipped == BOOL.TRUE) {
-		sq = MIRROR120(sq);
-	}
-	$( ".Square" ).each(function( index ) {    
-	 if( (RanksBrd[sq] == 7 - Math.round($(this).position().top/60)) && (FilesBrd[sq] == Math.round($(this).position().left/60)) ){   
-     	$(this).addClass('SqSelected');    
-     }
-    });
+	if(sq == SQUARES.NO_SQ) return;
+	$(".Square[data-sq='" + sq + "']").addClass('SqSelected');
 }
 
 function StartSearch() {
@@ -552,14 +520,19 @@ function StartSearch() {
 	srch_time = parseInt(tt) * 1000;
 	
 	SearchPosition(); 
+	$('#ThinkingPng').remove();
+	$('#ThinkingImageDiv').hide();
+	
+	if(srch_best == NOMOVE) {
+		CheckAndSet();
+		return;
+	}
 	
 	GameController.EngineSide = brd_side;
 	
 	// TODO MakeMove here on internal board and GUI
 	MakeMove(srch_best);
 	MoveGUIPiece(srch_best);	
-	
-	$('#ThinkingPng').remove();
 	
 	CheckAndSet();
 }
@@ -568,22 +541,25 @@ $("#TakeButton").click(function () {
 	
 	console.log('TakeBack request... brd_hisPly:' + brd_hisPly);
 	if(brd_hisPly > 0) {
-		TakeMove();
+		var takeBackCount = 1;
+		if(computerPlay == BOOL.TRUE && brd_hisPly > 1) {
+			takeBackCount = 2;
+		}
+		while(takeBackCount > 0 && brd_hisPly > 0) {
+			TakeMove();
+			takeBackCount--;
+		}
 		brd_ply = 0;
+		ResetUserMove();
+		RestorePreviousLastMove();
+		GameController.PlayerSide = brd_side;
+		GameController.EngineSide = brd_side ^ 1;
 		clearThinking();
 		SetInitialBoardPieces();
-		$("#currentFenSpan").text(BoardToFen());
-		if(Show == BOOL.TRUE) $("#moveHistory").text(" " + printGameLine());
-		
-		brd_PHV_count = brd_HR_count;
-		if(brd_HR_flag){
-			if(brd_HR_piece == 'K')
-				BHV_flag = BOOL.TRUE;
-			else 
-				PHV_flag = BOOL.TRUE;
-		}
-		$("#GameStatus").text("");
-		$("#PHVCountSpan").text(""); 
+		SetSqSelected(LastMove.From);
+		SetSqSelected(LastMove.To);
+		CheckAndSet();
+		GameController.GameSaved = BOOL.FALSE;
 	}
 });
 
@@ -605,13 +581,17 @@ $("#FlipButton").click(function () {
 	initBoardSquares();
 	SetInitialBoardPieces();
 
-	SetSqSelected(LastMove.From);
-	SetSqSelected(LastMove.To);
+	if(setupBoard != BOOL.TRUE) {
+		SetSqSelected(LastMove.From);
+		SetSqSelected(LastMove.To);
+	}
 });
 
 function NewGame() {
 
 	setupBoard = BOOL.FALSE;
+	ResetLastMove();
+	ResetUserMove();
 	
 	$('#fenIn').val(START_FEN);
 	ParseFen(START_FEN);
@@ -688,6 +668,9 @@ function initBoardSquares() {
 	var lightString;
 	var lastLight=0;
 	var t_rank, t_file;
+	var dataSq;
+
+	$("#Board").empty();
 
 	for(rankIter = RANKS.RANK_8; rankIter >= RANKS.RANK_1; rankIter--) {	
 		light = lastLight ^ 1;
@@ -699,19 +682,20 @@ function initBoardSquares() {
 		    if(light==0) lightString="Light";
 			else lightString="Dark";
 			t_file = (GameController.BoardFlipped==BOOL.TRUE)?(7-fileIter):fileIter;
+			dataSq = FR2SQ(t_file, t_rank);
 			if(fileIter == FILES.FILE_H && rankIter == RANKS.RANK_8) 
-				divString = "<div class=\"Square clickElement " + rankName + " " + fileName + " " + lightString + "\">" +
+				divString = "<div class=\"Square clickElement " + rankName + " " + fileName + " " + lightString + "\" data-sq=\"" + dataSq + "\">" +
 				"<span class=\"rankchar r" + (t_rank+1) +"\">"+( ranksChar_en[t_rank] ) + "</span>" + 
 				"<span class=\"filechar f" + String.fromCharCode('a'.charCodeAt() + t_file) + "\">" + (filesChar_en[t_file]) + "</span></div>";
 			else if(fileIter < FILES.FILE_H && rankIter == RANKS.RANK_8) 
-				divString = "<div class=\"Square clickElement " + rankName + " " + fileName + " " + lightString + "\">" +
+				divString = "<div class=\"Square clickElement " + rankName + " " + fileName + " " + lightString + "\" data-sq=\"" + dataSq + "\">" +
 				"<span class=\"filechar f" + String.fromCharCode('a'.charCodeAt() + t_file) + "\">" + (filesChar_en[t_file]) + "</span></div>";
 			else if(fileIter == FILES.FILE_H && rankIter < RANKS.RANK_8){
-				divString = "<div class=\"Square clickElement " + rankName + " " + fileName + " " + lightString + "\">" +
+				divString = "<div class=\"Square clickElement " + rankName + " " + fileName + " " + lightString + "\" data-sq=\"" + dataSq + "\">" +
 				"<span class=\"rankchar r" + (t_rank+1) +"\">"+( ranksChar_en[t_rank] ) + "</span></div>";
 			}
 			else
-				divString = "<div class=\"Square clickElement " + rankName + " " + fileName + " " + lightString + "\"/>";
+				divString = "<div class=\"Square clickElement " + rankName + " " + fileName + " " + lightString + "\" data-sq=\"" + dataSq + "\"/>";
 			light ^= 1;
 			$("#Board").append(divString);
 		}
@@ -755,7 +739,7 @@ function SetInitialBoardPieces() {
 			rankName = "rank" + (rank + 1);	
 			fileName = "file" + (file + 1);
 			pieceFileName = "images/" + SideChar[PieceCol[pce]] + PceChar[pce].toUpperCase() + ".png";
-			imageString = "<image src=\"" + pieceFileName + "\" class=\"Piece " + rankName + " " + fileName + "\"/>";
+			imageString = "<img src=\"" + pieceFileName + "\" alt=\"\" data-sq=\"" + sq120 + "\" class=\"Piece " + rankName + " " + fileName + "\"/>";
 			$("#Board").append(imageString);
 		}
 	}
@@ -769,16 +753,24 @@ function SetInitialBoardPieces() {
 	
 	computerPlay = (Opponent == "comp")?BOOL.TRUE:BOOL.FALSE;
 	GameController.autoMove = BOOL.FALSE;
-	$("#AutoMove").text("Auto Move");
+	$("#AutoMove").text("เดินอัตโนมัติ");
 }
 
 function clearThinking(){
-	$("#OrderingOut").text("Ordering:");
-	$("#DepthOut").text("Depth: ");
-	$("#ScoreOut").text("Score:");
-	$("#NodesOut").text("Nodes:");
-	$("#TimeOut").text("Time: ");
-	$("#BestOut").text("BestMove: ");
+	if(searchDelayHandle !== null) {
+		clearTimeout(searchDelayHandle);
+		searchDelayHandle = null;
+	}
+	srch_stop = BOOL.TRUE;
+	srch_thinking = BOOL.FALSE;
+	$('#ThinkingPng').remove();
+	$('#ThinkingImageDiv').hide();
+	$("#OrderingOut").text("ประสิทธิภาพการเรียง:");
+	$("#DepthOut").text("ความลึก: ");
+	$("#ScoreOut").text("คะแนน:");
+	$("#NodesOut").text("จำนวนโหนด:");
+	$("#TimeOut").text("เวลา: ");
+	$("#BestOut").text("ตาเดินที่แนะนำ: ");
 }
 
 GameController.autoMove = BOOL.FALSE;
@@ -789,10 +781,12 @@ $("#AutoMove").click(function(){
 		$("input:radio[name=opponent][value=comp]").prop("checked",true);
 		Opponent = "comp";
 		computerPlay = BOOL.TRUE;
-		$("#AutoMove").text("Stop Auto Move");
+		GameController.EngineSide = brd_side;
+		GameController.PlayerSide = brd_side ^ 1;
+		$("#AutoMove").text("หยุดเดินอัตโนมัติ");
 		PreSearch();
 	}
-	else $("#AutoMove").text("Auto Move");
+	else $("#AutoMove").text("เดินอัตโนมัติ");
 });
 
 /*
@@ -824,6 +818,10 @@ function saveGame(){
 $('#SetBoard').click(function (){
 
 	setupBoard = BOOL.TRUE;
+	ResetLastMove();
+	ResetUserMove();
+	selectedPiece = PIECES.EMPTY;
+	$('#SetPiece .SquareS, #SetPiece .PieceS').remove();
 	
 	$('#EngineOutput').hide();
 	$('#OppSelect').hide();
@@ -840,7 +838,7 @@ $('#SetBoard').click(function (){
 		divString = "<div class=\"SquareS clickElement " + SideChar[PieceCol[pce]] + " " + PceChar[pce].toUpperCase() + " " + lightString + "\"/>";
 		$("#SetPiece").append(divString);
 		pieceFileName = "images/" + SideChar[PieceCol[pce]] + PceChar[pce].toUpperCase() + ".png";
-		imageString = "<image src=\"" + pieceFileName + "\" class=\"PieceS " + SideChar[PieceCol[pce]] + " " + PceChar[pce].toUpperCase() + "\"/>";
+		imageString = "<img src=\"" + pieceFileName + "\" alt=\"\" class=\"PieceS " + SideChar[PieceCol[pce]] + " " + PceChar[pce].toUpperCase() + "\"/>";
 		$("#SetPiece").append(imageString);
 	}
 	$('#SetBoard').hide();
@@ -850,13 +848,15 @@ $(document).on('click','.PieceS', function (e) {
 	if(setupBoard == BOOL.TRUE){
 		var pPiece = [PIECES.wK, PIECES.wR, PIECES.wC, PIECES.wN, PIECES.wM, PIECES.wP, 
 					PIECES.bK, PIECES.bR, PIECES.bC, PIECES.bN, PIECES.bM, PIECES.bP]; 
-		var position = $("#SetPiece").position(); 
+		var position = $("#SetPiece").offset(); 
 		var workedX = Math.floor(position.left); 
 		var workedY = Math.floor(position.top);
 		var PX = Math.floor(e.pageX); 
 		var PY = Math.floor(e.pageY); 
-		var file = Math.floor((PX-workedX) / 60); 
-		var rank = Math.floor((PY-workedY) / 60); 
+		var squareSize = $("#SetPiece .SquareS").first().outerWidth() || 60;
+		var file = Math.floor((PX-workedX) / squareSize); 
+		var rank = Math.floor((PY-workedY) / squareSize); 
+		if(file < 0 || file > 1 || rank < 0 || rank > 5) return;
 		
 		selectedPiece = pPiece[ rank + 6 * file]; 
 		
@@ -864,17 +864,17 @@ $(document).on('click','.PieceS', function (e) {
 				$(this).removeClass('SqSelected'); 
 		}); 
 		$( ".SquareS" ).each(function( index ) {    
-			if( ( rank == $(this).position().top / 60) && 
-				( file == $(this).position().left /60) ){   
+			if( ( rank == Math.round($(this).position().top / squareSize)) && 
+				( file == Math.round($(this).position().left / squareSize) ) ){   
 				$(this).addClass('SqSelected'); 
 			} 
 		}); 
 	} 
 });
 
-var aString = "<div class=\"Stm\"><input type=\"radio\" name=\"STM\" value=\"w\" checked=\"checked\">White<br>";
-	aString = aString +  "<input type=\"radio\" name=\"STM\" value=\"b\" >Black<br>";
-	aString = aString + "<button type=\"button\" id=\"ClearBoard\">Clear board</button><br><br>";
+var aString = "<div class=\"Stm\"><input type=\"radio\" name=\"STM\" value=\"w\" checked=\"checked\">ขาว<br>";
+	aString = aString +  "<input type=\"radio\" name=\"STM\" value=\"b\" >ดำ<br>";
+	aString = aString + "<button type=\"button\" id=\"ClearBoard\">ล้างกระดาน</button><br><br>";
 	aString = aString + "</div>";
 $("#SetPiece").append(aString);
 	
@@ -892,6 +892,8 @@ $("input:radio[name=STM]").click(function(){
 });
 
 $('#ClearBoard').click(function(){
+	ResetLastMove();
+	ResetUserMove();
 	ResetBoard();
 	SetInitialBoardPieces();
 	$("input:radio[name=STM][value=w]").prop("checked",true);

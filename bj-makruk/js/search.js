@@ -110,7 +110,7 @@ function Quiescence(alpha, beta) {
 	if( PvMove != NOMOVE) {
 		for(MoveNum = brd_moveListStart[brd_ply]; MoveNum < brd_moveListStart[brd_ply + 1]; ++MoveNum) {
 			if( brd_moveList[MoveNum] == PvMove) {
-				brd_moveScores[MoveNum].score = 2000000;
+				brd_moveScores[MoveNum] = 2000000;
 				break;
 			}
 		}
@@ -164,7 +164,7 @@ function AlphaBeta(alpha, beta, depth, DoNull) {
 	}
 	
 	if(brd_ply > MAXDEPTH - 1) {
-		return EvalPosition(pos);
+		return EvalPosition();
 	}
 	
 	var InCheck = SqAttacked(brd_pList[PCEINDEX(Kings[brd_side],0)], brd_side^1);
@@ -204,7 +204,7 @@ function AlphaBeta(alpha, beta, depth, DoNull) {
 	if( PvMove != NOMOVE) {
 		for(MoveNum = brd_moveListStart[brd_ply]; MoveNum < brd_moveListStart[brd_ply + 1]; ++MoveNum) {
 			if( brd_moveList[MoveNum] == PvMove) {
-				brd_moveScores[MoveNum].score = 2000000;
+				brd_moveScores[MoveNum] = 2000000;
 				break;
 			}
 		}

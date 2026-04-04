@@ -57,7 +57,11 @@
  - Add Thai letter for coordinate
  - Add background texture
  - Add EvalMobility
- 
+
+ 4 APR 2026
+ - Version 0.18
+ - fixed bug
+
 */
 
 $(document).ajaxComplete(function() {
