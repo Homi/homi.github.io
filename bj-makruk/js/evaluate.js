@@ -112,25 +112,25 @@ var KingO = [
 ];
 
 var LoneKingDark = [
-	100	,	80	,	60	,	40	,	20	,	10	,	0	,	-10	,	 
-	80	,	100	,	80	,	60	,	40	,	20	,	20	,	0	,	
-	60	,	80	,	120	,	100	,	80	,	60	,	20	,	10	,	
-	40	,	60	,	100	,	150	,	120	,	80	,	40	,	20	,	
-	20	,	40	,	80	,	120	,	150	,	100	,	60	,	40	,	
-	10	,	20	,	60	,	80	,	100	,	120	,	80	,	60	,	
-	0	,	10	,	20	,	40	,	60	,	80	,	100	,	80	,	
-	-10	,	0	,	10	,	20	,	40	,	60	,	80	,	100
+	100,	100,	80	,	0	,	0	,	-80	,	-100,	-100,	
+	100,	80	,	40	,	40	,	40	,	-40	,	-80	,	-100,	
+	80	,	40	,	60	,	80	,	80	,	-60	,	-40	,	-80,	
+	0	,	40	,	80	,	100	,	100	,	80	,	40	,	0,	
+	0	,	40	,	80	,	100	,	100	,	80	,	40	,	0,	
+	-80	,	-40	,	-60	,	80	,	80	,	60	,	40	,	80,	
+	-100,	-80	,	-40	,	40	,	40	,	40	,	80	,	100,	
+	-100,	-100,	-80	,	0	,	0	,	80	,	100,	100
 ];
 
 var LoneKingLight = [
-	-10	,	0	,	10	,	20	,	40	,	60	,	80	,	100	,	
-	0	,	10	,	20	,	40	,	60	,	80	,	100	,	80	,	
-	10	,	20	,	60	,	80	,	100	,	120	,	80	,	60	,	
-	20	,	40	,	80	,	120	,	150	,	100	,	60	,	40	,	
-	40	,	60	,	100	,	150	,	120	,	80	,	40	,	20	,	
-	60	,	80	,	120	,	100	,	80	,	60	,	20	,	10	,	
-	80	,	100	,	80	,	60	,	40	,	20	,	10	,	0	,	
-	100	,	80	,	60	,	40	,	20	,	10	,	0	,	-10
+	-100,	-100,	-80	,	0	,	0	,	80	,	100	,	100,	
+	-100,	-80	,	-40	,	40	,	40	,	40	,	80	,	100,	
+	-80	,	-40	,	-60	,	80	,	80	,	60	,	40	,	80,	
+	0	,	40	,	80	,	100	,	100	,	80	,	40	,	0,	
+	0	,	40	,	80	,	100	,	100	,	80	,	40	,	0,	
+	80	,	40	,	60	,	80	,	80	,	-60	,	-40	,	-80,	
+	100	,	80	,	40	,	40	,	40	,	-40	,	-80	,	-100,	
+	100	,	100	,	80	,	0	,	0	,	-80	,	-100,	-100
 ];
 
 var LoneKingCon = [
@@ -257,24 +257,30 @@ function PawnsInit() {
 
 	var index = 0;
 	var pce, pceNum, sq;
-	for(index = 0; index < 10; ++index) {	// Files: (0) 1 2 3 4 5 6 7 8 (9)			
-		PawnRanksWhite[index] = RANKS.RANK_8;			
+	for(index = 0; index < 10; ++index) {   // Files: (0) 1 2 3 4 5 6 7 8 (9)         
+		PawnRanksWhite[index] = RANKS.RANK_8;         
 		PawnRanksBlack[index] = RANKS.RANK_1;
 	}
-	pce = PIECES.wP;	
+	pce = PIECES.wP;   
 	for(pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
 		sq = brd_pList[PCEINDEX(pce,pceNum)];
-		if(RanksBrd[sq] < PawnRanksWhite[FilesBrd[sq]+1]) {
-			PawnRanksWhite[FilesBrd[sq]+1] = RanksBrd[sq];
+		var f = FilesBrd[sq]+1;
+		if(f >= 0 && f < PawnRanksWhite.length) {
+			if(RanksBrd[sq] < PawnRanksWhite[f]) {
+				PawnRanksWhite[f] = RanksBrd[sq];
+			}
 		}
-	}	
-	pce = PIECES.bP;	
+	}   
+	pce = PIECES.bP;   
 	for(pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
 		sq = brd_pList[PCEINDEX(pce,pceNum)];
-		if(RanksBrd[sq] > PawnRanksBlack[FilesBrd[sq]+1]) {
-			PawnRanksBlack[FilesBrd[sq]+1] = RanksBrd[sq];
-		}			
-	}	
+		var f = FilesBrd[sq]+1;
+		if(f >= 0 && f < PawnRanksBlack.length) {
+			if(RanksBrd[sq] > PawnRanksBlack[f]) {
+				PawnRanksBlack[f] = RanksBrd[sq];
+			}
+		}
+	}   
 }
 
 function pceDistance(sq1, sq2){
@@ -319,9 +325,10 @@ function pairOfPawn(pcePawn){
 	var pawnFiles = [0, 0, 0, 0, 0, 0, 0, 0];
 	for(pceNum = 0; pceNum < brd_pceNum[pcePawn]; ++pceNum){
 		sq = brd_pList[PCEINDEX(pcePawn,pceNum)];
-		if( FilesBrd[sq] != SQUARES.OFFBOARD ) pawnFiles[FilesBrd[sq]]++;
+		var f = FilesBrd[sq];
+		if(f >= 0 && f < pawnFiles.length && f != SQUARES.OFFBOARD) pawnFiles[f]++;
 	} 
-	for(file = FILES.FILE_A; file < FILES.FILE_H; ++file) {
+	for(file = FILES.FILE_A; file < FILES.FILE_H-1; ++file) {
 		if( pawnFiles[file] > 0 && pawnFiles[file+1] > 0 ) return BOOL.TRUE;
 	}
 	return BOOL.FALSE;

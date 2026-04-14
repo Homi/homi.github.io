@@ -826,12 +826,11 @@ $('#SetBoard').click(function (){
 	$('#EngineOutput').hide();
 	$('#OppSelect').hide();
 	$('#SetPiece').show();
-	
+
+	var fenStr = $('#fenIn').val();	
 	ResetBoard();
-	ClearAllPieces();
+	ParseFen(fenStr);
 	brd_side = COLOURS.WHITE; 
-	$("#currentFenSpan").text(BoardToFen());
-	$('#fenIn').val(BoardToFen());
 	
 	var pce, divString, pieceFileName, imageString, lightString="Light";
 	for(pce=PIECES.wP; pce<=PIECES.bK; pce++){	
@@ -841,6 +840,10 @@ $('#SetBoard').click(function (){
 		imageString = "<img src=\"" + pieceFileName + "\" alt=\"\" class=\"PieceS " + SideChar[PieceCol[pce]] + " " + PceChar[pce].toUpperCase() + "\"/>";
 		$("#SetPiece").append(imageString);
 	}
+	$(function() {
+  		$("#SetPiece").draggable();
+	});
+	$("#currentFenSpan").text(fenStr);
 	$('#SetBoard').hide();
 });
 
