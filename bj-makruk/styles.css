@@ -355,8 +355,7 @@ body:after{
 
 	#OppSelect,
 	#ThinkingImageDiv,
-	#EngineOutput,
-	#SetPiece {
+	#EngineOutput{
 		position: static;
 		left: auto;
 		top: auto;
@@ -380,12 +379,3 @@ body:after{
 		max-width: 100%;
 	}
 }
-
-@media (max-width: 560px) {
-  #SetPiece {
-    position: relative;
-  }
-  .SquareS, .Stm {
-    position: relative;
-  }
-} 
