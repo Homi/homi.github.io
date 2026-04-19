@@ -355,12 +355,18 @@ body:after{
 
 	#OppSelect,
 	#ThinkingImageDiv,
-	#EngineOutput{
+	#EngineOutput {
 		position: static;
 		left: auto;
 		top: auto;
 		margin: 16px auto 0;
 		max-width: calc(var(--board-size) + 2px);
+	}
+
+	#SetPiece {
+		left: calc(50vw + (var(--board-size) + (var(--board-gap) * 2) + (var(--board-border) * 2)) / 2 + var(--panel-gap));
+	}
+}
 	}
 }
 
@@ -377,5 +383,9 @@ body:after{
 	#CurrentFenDiv,
 	.footer {
 		max-width: 100%;
+	}
+
+	#SetPiece {
+		left: calc(50vw + (var(--board-size) + (var(--board-gap) * 2) + (var(--board-border) * 2)) / 2 + var(--panel-gap));
 	}
 }
