@@ -159,9 +159,9 @@ header h3 {
 
 #SetPiece {
 	position: absolute;
+	top: 140px;
 	left: calc(60px + var(--board-size) + var(--panel-gap));
-	top: 100px;
-	width: var(--panel-width);
+	width: /*var(--panel-width);*/ var(--setpiece-width);
 	height: var(--setpiece-height);
 	border: 1px solid var(--panel-border);
 	box-sizing: border-box;
@@ -170,7 +170,7 @@ header h3 {
 	background: var(--panel-bg);
 	border-radius: 6px;
 	box-shadow: var(--panel-shadow);
-	z-index: 2000;
+	z-index: 1000;
 	cursor: move;
 }
 
@@ -243,6 +243,8 @@ select:focus {
 
 .SquareS {
 	position: absolute;
+	top: 10px;
+	left: 10px;
 	width: var(--square-size);
 	height: var(--square-size);
 	border-style: solid;
@@ -377,13 +379,5 @@ body:after{
 	.footer {
 		max-width: 100%;
 	}
-}
-
-#SetPiece {
-  position: absolute;
-  top: 100px; /* เริ่มต้น */
-  left: 80px;
-  z-index: 1000;
-  cursor: move;
 }
 

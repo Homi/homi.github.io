@@ -905,4 +905,3 @@ $('#ClearBoard').click(function(){
 	$('#fenIn').val(BoardToFen());
 });
 
-
