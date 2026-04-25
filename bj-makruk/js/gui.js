@@ -1,4 +1,6 @@
 //BJ Makruk
+var Version = "0.20";
+$("#Version").text("เวอร์ชั่น " + Version);
 
 var Opponent = "comp";
 var computerPlay = BOOL.TRUE;
@@ -267,7 +269,6 @@ function ClickedSquare(pageX, pageY) {
 function SyncFenDisplay() {
 	var currentFen = BoardToFen();
 	$("#currentFenSpan").text(currentFen);
-	$('#fenIn').val(currentFen);
 }
 
 function updateMove(){
@@ -788,32 +789,6 @@ $("#AutoMove").click(function(){
 	}
 	else $("#AutoMove").text("เดินอัตโนมัติ");
 });
-
-/*
-function saveGame(){
-
-	var urlStr = "{$MyURL}/gamesave.php";
-	var gameStatus = $("#GameStatus").text();
-	var tt = $('#ThinkTimeChoice').val();
-	var fenStr = $("#fenIn").val();
-	var moveStr = printGameLine();
-	
-	//Cross-Origin Resource Sharing standard (CORS)
-	$.ajax({ 
-		type: 'POST',
-		url: urlStr,
-		crossDomain: true,
-		data : { num : '04', pstart: fenStr, mlist: moveStr, result: gameStatus, t_sec:tt },
-		dataType: 'json',
-		success: function(responseData, textStatus, jqXHR){
-			console.log( 'Game saved: ' + responseData.record );
-		},
-		error: function(responseData, textStatus, errorThrown){
-			console.log('POST failed.');
-		}
-	});
-}
-*/
 
 $('#SetBoard').click(function (){
 
